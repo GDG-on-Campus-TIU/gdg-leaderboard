@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { prettyJSON } from "hono/pretty-json";
+
 import { prometheus } from "@hono/prometheus";
 
 import { mainRouter } from "./routes/_index";

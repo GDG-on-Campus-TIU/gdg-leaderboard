@@ -9,6 +9,7 @@ const mainRouter = new Hono();
 mainRouter.route("/auth", authRouter);
 mainRouter.route("/health", healthRouter);
 
+// Protecting admin routes
 mainRouter.use("/admin/*", adminAuthGuard);
 mainRouter.route("/admin", adminRouter);
 

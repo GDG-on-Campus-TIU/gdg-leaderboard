@@ -13,7 +13,7 @@ import { decode, verify } from "hono/jwt";
  *      -H "Authorization: Bearer YOUR_ADMIN_TOKEN"
  * ```
  *
- * @returns {Promise<Response|void>} Returns a response with error message if unauthorized,
+ * @returns { Promise<Response | void> } Returns a response with error message if unauthorized,
  * or proceeds to the next middleware if authentication succeeds.
  */
 export const adminAuthGuard = async (c: Context, next: Next) => {
@@ -36,11 +36,14 @@ export const adminAuthGuard = async (c: Context, next: Next) => {
     token,
     process.env.JWT_SECRET ?? "demo_pass"
   );
+
   if (!verifiedToken) {
     return c.text("Invalid token", 401);
   }
 
-  const user = c.set("jwt_payload", verifiedToken);
+  const _user_jwt_payload = verifiedToken
+
+  c.set("jwt_payload", _user_jwt_payload);
 
   return next();
 };
