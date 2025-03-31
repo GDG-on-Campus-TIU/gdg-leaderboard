@@ -1,5 +1,6 @@
 import { Context, Next } from "hono";
 import { decode, verify } from "hono/jwt";
+import { log } from "../utils/logger";
 
 /**
  * Middleware function to guard admin routes.
@@ -17,33 +18,44 @@ import { decode, verify } from "hono/jwt";
  * or proceeds to the next middleware if authentication succeeds.
  */
 export const adminAuthGuard = async (c: Context, next: Next) => {
-  const authHeader = c.req.header("Authorization");
-  if (!authHeader) {
-    return c.text("Unauthorized", 401);
+  try {
+    const authHeader = c.req.header("Authorization");
+    if (!authHeader) {
+      return c.text("Unauthorized", 401);
+    }
+
+    const token = authHeader.split(" ")[1];
+    if (!token) {
+      return c.text("Invalid Authorization format", 401);
+    }
+
+    // Check if it's a direct admin token
+    if (token === process.env.ADMIN_TOKEN) {
+      // Allow access with admin token
+      return next();
+    }
+
+    const decodedToken = decode(token);
+    if (!decodedToken) {
+      return c.text("Invalid token format", 401);
+    }
+
+    try {
+      // Verify the token using HS256 algorithm
+      const verifiedToken = await verify(
+        token,
+        process.env.JWT_SECRET ?? "demo_pass",
+        "HS256" // Changed from RS512 to HS256
+      );
+
+      c.set("jwt_payload", verifiedToken);
+      return next();
+    } catch (error) {
+      log.error(`JWT verification error: ${error}`);
+      return c.text("Invalid or expired token", 401);
+    }
+  } catch (error) {
+    log.error(`Auth guard error: ${error}`);
+    return c.text("Authentication error", 500);
   }
-
-  const token = authHeader.split(" ")[1];
-  if (token !== process.env.ADMIN_TOKEN) {
-    return c.text("Forbidden", 403);
-  }
-
-  const decodedToken = decode(token);
-  if (!decodedToken) {
-    return c.text("Invalid token", 401);
-  }
-
-  const verifiedToken = await verify(
-    token,
-    process.env.JWT_SECRET ?? "demo_pass"
-  );
-
-  if (!verifiedToken) {
-    return c.text("Invalid token", 401);
-  }
-
-  const _user_jwt_payload = verifiedToken
-
-  c.set("jwt_payload", _user_jwt_payload);
-
-  return next();
 };

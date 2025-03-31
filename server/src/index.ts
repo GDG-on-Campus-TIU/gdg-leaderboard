@@ -7,6 +7,7 @@ import { prometheus } from "@hono/prometheus";
 
 import { mainRouter } from "./routes/_index";
 import { log } from "./utils/logger";
+import { prisma } from "./db/prisma";
 
 // ----------------------------------------------
 // Constants setups
@@ -53,6 +54,9 @@ app.notFound((c) => {
 
 app.onError((err, c) => {
   log.error(`${err}`);
+  log.error("Stack: ", err.stack);
+  prisma.$disconnect();
+  log.error("Disconnected from DB");
   return c.json(
     {
       error: "Internal Server Error",
@@ -60,6 +64,32 @@ app.onError((err, c) => {
     },
     500
   );
+});
+
+process.on("SIGINT", async () => {
+  log.info("SIGINT signal received: closing HTTP server");
+  await prisma.$disconnect();
+  log.info("Disconnected from DB");
+  process.exit(0);
+});
+
+process.on("SIGTERM", async () => {
+  log.info("SIGTERM signal received: closing HTTP server");
+  await prisma.$disconnect();
+  log.info("Disconnected from DB");
+  process.exit(0);
+});
+
+process.on("uncaughtException", async (err) => {
+  log.error("Uncaught Exception: ", err);
+  await prisma.$disconnect();
+  log.error("Disconnected from DB");
+});
+
+process.on("unhandledRejection", async (reason) => {
+  log.error("Unhandled Rejection: ", reason);
+  await prisma.$disconnect();
+  log.error("Disconnected from DB");
 });
 
 // ----------------------------------------------
