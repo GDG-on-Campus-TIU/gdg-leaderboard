@@ -34,6 +34,8 @@ let content = () =>
                     </div>
                     <h1>LEADERBOARD</h1>
                 </div>
+                <div class="domain-checkboxes flex flex-row jus">
+                </div>
                 <div class="leaderboard-container flex justify-center" style="">
                     <table class="leaderboard-table ">
                         <thead class=" ">

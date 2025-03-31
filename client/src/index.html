@@ -8,8 +8,8 @@ let content = () =>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link href="output.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <link href="output.css" rel="stylesheet">
 </head>
 
 <body>
@@ -23,24 +23,29 @@ let content = () =>
             <div class="noise-overlay"></div>
             <div class="particles-container" id="particles-container"></div>
         </div>
-        <div class="content-container">
-            <div class="align-center justify-center flex flex-col">
-                <div class="main-heaing flex flex-row justify-center gradient-text">
-                    <h1>G</h1>
-                    <h1>D</h1>
-                    <h1>G</h1>
-                    <h1 class="bg-black">TIU LEADERBOARD</h1>
+        <div class="content-container outline-none">
+            <div class=" align-center justify-center flex flex-col">
+                <div class="main-heading flex flex-row justify-center gradient-text">
+                   <div class="gdg-tiu flex flex-row justify-center">
+                       <h1>G</h1>
+                       <h1>D</h1>
+                       <h1>G&nbsp;</h1>
+                       <h1>TIU&nbsp;</h1>
+                    </div>
+                    <h1>LEADERBOARD</h1>
                 </div>
-                <div class="leaderboard-container">
-                    <table class="leaderboard-table">
-                        <thead>
+                <div class="domain-checkboxes flex flex-row jus">
+                </div>
+                <div class="leaderboard-container flex jus">
+                    <table class="leaderboard-table ">
+                        <thead class=" ">
                             <tr>
-                                <th class="th">Rank</th>
-                                <th class="th">Name</th>
-                                <th class="th">Attendance Score</th>
-                                <th class="th">Participation Score</th>
-                                <th class="th">Projects Score</th>
-                                <th class="th">Total Score</th>
+                                <th class="th rank">Rank</th>
+                                <th class="th name">Name</th>
+                                <th class="th at-sc">Attendance Score</th>
+                                <th class="th pt-sc">Participation Score</th>
+                                <th class="th pj-sc">Projects Score</th>
+                                <th class="th t-sc">Total Score</th>
                             </tr>
                         </thead>
                         <tbody id="leaderboard-body">
@@ -57,7 +62,6 @@ let content = () =>
                             </tr>`;
                             })
                             .join("")}
-
                         </tbody>
                     </table>
                 </div>
