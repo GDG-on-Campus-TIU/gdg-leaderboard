@@ -1,0 +1,67 @@
+package card
+
+import (
+	"fmt"
+	"path/filepath"
+	"strings"
+
+	"github.com/fogleman/gg"
+
+	"email-service/models"
+)
+
+// GenerateIDCard function takes a student object as input and generates an ID card image.
+// It uses the gg library to draw text on a template image and saves the output as a PNG file.
+// The function returns the path to the generated ID card image or an error if any step fails.
+//
+// Example usage:
+//
+//	student := models.Student{
+//	    Name:  "John Doe",
+//	    ClgID: "123456",
+//	    Dept:  "Computer Science",
+//	    Email: "example@google.com",
+//	}
+//
+//	idCardPath, err := GenerateIDCard(student)
+//
+//	if err != nil {
+//	    log.Fatalf("Error generating ID card: %v", err)
+//	}
+//
+//	fmt.Println("ID card generated at:", idCardPath)
+//
+// @param student models.Student - The student object containing information to be displayed on the ID card.
+// @return string - The path to the generated ID card image.
+func GenerateIDCard(student models.Student) (string, error) {
+	templatePath := filepath.Join("assets", "id_temp.png")
+	img, err := gg.LoadImage(templatePath)
+	if err != nil {
+		return "", fmt.Errorf("failed to load ID card template: %w", err)
+	}
+
+	ctx := gg.NewContextForImage(img)
+
+	poppinsFontPath := filepath.Join("assets", "poppins.ttf")
+	if err := ctx.LoadFontFace(poppinsFontPath, 62); err != nil {
+		return "", fmt.Errorf("failed to load Poppins font: %w", err)
+	}
+	ctx.SetRGB(1, 1, 1)
+	ctx.DrawStringAnchored(strings.Split(student.Name, " ")[0], 530, 700, 1, 0.5)
+	ctx.DrawStringAnchored(strings.Split(student.Name, " ")[1], 530, 760, 1, 0.5)
+
+	spaceMonoFontPath := filepath.Join("assets", "space-mono.ttf")
+	if err := ctx.LoadFontFace(spaceMonoFontPath, 28); err != nil {
+		return "", fmt.Errorf("failed to load Space Mono font: %w", err)
+	}
+	ctx.SetRGB(1, 1, 1)
+	deptAndID := fmt.Sprintf("%s - %s", student.Dept, student.ClgID)
+	ctx.DrawStringAnchored(deptAndID, 530, 810, 1, 0.5)
+
+	outputPath := filepath.Join("output", fmt.Sprintf("%s_id_card.png", student.ClgID))
+	if err := ctx.SavePNG(outputPath); err != nil {
+		return "", fmt.Errorf("failed to save ID card: %w", err)
+	}
+
+	return outputPath, nil
+}
