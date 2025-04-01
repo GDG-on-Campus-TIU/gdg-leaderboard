@@ -71,32 +71,34 @@ let content = () =>
                         });
                     }
                 </script>
-                <div class="leaderboard-container block ml-auto mr-auto">
-                    <table class="leaderboard-table ">
-                        <thead class=" ">
-                            <tr>
-                                <th class="th rank">Rank</th>
-                                <th class="th name">Name</th>
-                                <th class="th at-sc">Attendance Score</th>
-                                <th class="th pt-sc">Participation Score</th>
-                                <th class="th pj-sc">Projects Score</th>
-                                <th class="th t-sc">Total Score</th>
-                            </tr>
-                        </thead>
-                        <tbody id="leaderboard-body">
-                            ${player_details.map((player) => {
-                            return `
-                            <tr>
-                                <td class="td">${player.rank}</td>
-                                <td class="td">${player.name}</td>
-                                <td class="td">${player.attendance}</td>
-                                <td class="td">${player.participation}</td>
-                                <td class="td">${player.projects}</td>
-                                <td class="td">${player.total}</td>
-                            </tr>`;
-                            }).join("")}
-                        </tbody>
-                    </table>
+                <div class="leaderboard-parent flex overflow-hidden">
+                    <div class="leaderboard-container block ml-auto mr-auto ">
+                        <table class="leaderboard-table p-10">
+                            <thead class=" h-16">
+                                <tr >
+                                    <th class="th rank p-5">Rank</th>
+                                    <th class="th border-x border-x-amber-50  p-5 name">Name</th>
+                                    <th class="th border-x border-x-amber-50  p-5 at-sc">Attendance Score</th>
+                                    <th class="th border-x border-x-amber-50  p-5 pt-sc">Participation Score</th>
+                                    <th class="th border-x border-x-amber-50  p-5 pj-sc">Projects Score</th>
+                                    <th class="th t-sc p-5">Total Score</th>
+                                </tr>
+                            </thead>
+                            <tbody id="leaderboard-body">
+                                ${player_details.map((player, index) => {
+                                return `
+                                <tr class="tr ${index === 1 ? "odd-tr" : (index % 2 === 0 ? "even-tr" : "odd-tr")} h-16">
+                                    <td class="td ">${player.rank}</td>
+                                    <td class="td border-x border-x-amber-50">${player.name}</td>
+                                    <td class="td border-x border-x-amber-50 ">${player.attendance}</td>
+                                    <td class="td border-x border-x-amber-50 ">${player.participation}</td>
+                                    <td class="td border-x border-x-amber-50 ">${player.projects}</td>
+                                    <td class="td">${player.total}</td>
+                                </tr>`;
+                                }).join("")}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

@@ -18,49 +18,25 @@ function getAIMLLeaderboard(){
                 </tr>`}).join("")}
            `;
 }
-
-function getDSALeaderboard(){
+function getLeaderboard(player_details) {
     return `
-            ${dsa_player_details.map((player)=>{
+        ${player_details.map((player, index) => {
             return `
-                <tr>
+                <tr class="tr ${index === 1 ? "odd-tr" : (index % 2 === 0 ? "even-tr" : "odd-tr")} h-16">
                     <td class="td">${player.rank}</td>
-                    <td class="td">${player.name}</td>
-                    <td class="td">${player.attendance}</td>
-                    <td class="td">${player.participation}</td>
-                    <td class="td">${player.projects}</td>
+                    <td class="td border-x border-x-amber-50">${player.name}</td>
+                    <td class="td border-x border-x-amber-50">${player.attendance}</td>
+                    <td class="td border-x border-x-amber-50">${player.participation}</td>
+                    <td class="td border-x border-x-amber-50">${player.projects}</td>
                     <td class="td">${player.total}</td>
-                </tr>`}).join("")}
-           `;
+                </tr>`;
+        }).join("")}
+    `;
 }
-function getCloudLeaderboard(){
-    return `
-            ${cloud_player_details.map((player)=>{
-            return `
-                <tr>
-                    <td class="td">${player.rank}</td>
-                    <td class="td">${player.name}</td>
-                    <td class="td">${player.attendance}</td>
-                    <td class="td">${player.participation}</td>
-                    <td class="td">${player.projects}</td>
-                    <td class="td">${player.total}</td>
-                </tr>`}).join("")}
-           `;
-}
-function getWebDLeaderboard(){  
-    return `
-            ${webd_player_details.map((player)=>{
-            return `
-                <tr>
-                    <td class="td">${player.rank}</td>
-                    <td class="td">${player.name}</td>
-                    <td class="td">${player.attendance}</td>
-                    <td class="td">${player.participation}</td>
-                    <td class="td">${player.projects}</td>
-                    <td class="td">${player.total}</td>
-                </tr>`}).join("")}
-           `;
-}
+const dsaLeaderboard = getLeaderboard(dsa_player_details);
+const cloudLeaderboard = getLeaderboard(cloud_player_details);
+const webdLeaderboard = getLeaderboard(webd_player_details);
+const aimlLeaderboard = getLeaderboard(aiml_player_details);
 
 const app = express();
 app.use(express.urlencoded({extended: false}));
@@ -71,16 +47,16 @@ app.get("/", (req,res)=>{
     res.send(content());
 })
 app.get("/aiml-leaderboard", (req,res)=>{
-    res.send(getAIMLLeaderboard());
+    res.send(aimlLeaderboard);
 })
 app.get("/dsa-leaderboard", (req,res)=>{
-    res.send(getDSALeaderboard());
+    res.send(dsaLeaderboard);
 })
 app.get("/cloud-leaderboard", (req,res)=>{
-    res.send(getCloudLeaderboard());
+    res.send(cloudLeaderboard);
 })
 app.get("/webd-leaderboard", (req,res)=>{
-    res.send(getWebDLeaderboard());
+    res.send(webdLeaderboard);
 })
 app.listen(3001, () => {
     console.log("Server is running on http://localhost:3001");
