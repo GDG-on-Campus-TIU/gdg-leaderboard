@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="shortcut icon" href="https://media.discordapp.net/attachments/1293624813566562419/1293672676338171976/461295765_1083511223192628_742740430797512077_n.jpg?ex=67ecf651&is=67eba4d1&hm=fe9d3b748022d12022edca208ea6fd41ca3b162374709431d491da1f6c2efcee&=&format=webp" type="image/x-icon">
+    <title>Welcome to GDG On Campus TIU</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        background-color: #f7f7f7;
+        margin: 0;
+        padding: 20px;
+      }
+      .container {
+        background: #fff;
+        max-width: 600px;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        overflow: hidden;
+      }
+
+      .hero__banner {
+        width: 100%;
+        height: auto;
+        border-radius: 4px;
+      }
+
+      .footer__banner {
+        width: 60%;
+        margin-inline: auto;
+        height: auto;
+        border-radius: 4px;
+      }
+
+      h2 {
+        color: #333;
+      }
+      p {
+        margin: 15px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <img
+        class="hero__banner"
+        src="https://media.discordapp.net/attachments/1293624813566562419/1302637909530116136/unnamed.jpg?ex=67ed4717&is=67ebf597&hm=f797a48f7078f3dd98821b3b00b73a28ee7bf172ecf5e9f6510fabe929b07ce0&=&format=webp"
+        alt="Banner"
+      />
+      <h2 style="color: blue;">Hello {{ .Name }},</h2>
+      <p>Welcome on board soldier!!</p>
+      <p>
+        <strong>Studane Name:</strong> {{ .Name }}<br />
+        <strong>Student ID:</strong> {{ .ClgID }}<br />
+        <strong>Student Dept:</strong> {{ .Dept }}<br />
+      </p>
+      <p>
+        Let the battle begin, now that you have successfully signed up for it.<br>
+        This is your student ID card for the GDG On Campus TIU. Please keep it safe and present it at all the future events.
+      </p>
+      <p>
+        <h3 style="color: blue;">So, what the leader board is for ?</h3>
+        <span>
+          Basically for each session we host, you, as the soldier of the battle, will be given some assignments, all you have to do is just follow
+          the instructions and complete the assignments. You will be given points for each assignment you complete. The more points you have, the higher you will be on the leaderboard.</span>
+        <br />
+          Other points will be given for the following:
+        <ul>
+          <li>Attending the session <strong>(Direct)</strong></li>
+          <li>Completing the assignments <strong>(Direct)</strong></li>
+          <li>Participating in the events <strong>(Direct)</strong></li>
+          <li>Helping others</li>
+          <li>Helping the GDG On Campus TIU team</li>
+        </ul>
+        <br>
+        After all of this, you will be given some swags for <span style="color: blue;">X</span> amount of top participants which we will be announcing at the end <span style="color: blue;">X</span> amount of time
+        </span>
+      </p>
+      <p>Thank you,<br /><string>GDG On Campus TIU</strong></p>
+      <hr>
+      <footer>
+        <p style="font-size: 12px; color: #777;">
+          This email was sent to {{ .Email }} because you signed up for GDG On Campus TIU.
+          <br>
+          &copy; 2025 GDG On Campus TIU. All rights reserved.
+        </p>
+        <div style="width: 100%; display: grid; place-items: center;">
+          <img 
+          class="footer__banner"
+          src="https://media.discordapp.net/attachments/1293624813566562419/1302658010350489600/unnamed.png?ex=67ecb10f&is=67eb5f8f&hm=252f42debd7a2edc3f649e4a51953a6ff12aa8dae62929b67cce922bee0c412a&=&format=webp" 
+          alt="footer__banner"
+          >
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>
