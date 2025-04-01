@@ -77,10 +77,10 @@ let content = () =>
                             <thead class=" h-16">
                                 <tr >
                                     <th class="th rank p-5">Rank</th>
-                                    <th class="th border-x border-x-amber-50  p-5 name">Name</th>
-                                    <th class="th border-x border-x-amber-50  p-5 at-sc">Attendance Score</th>
-                                    <th class="th border-x border-x-amber-50  p-5 pt-sc">Participation Score</th>
-                                    <th class="th border-x border-x-amber-50  p-5 pj-sc">Projects Score</th>
+                                    <th class="th border-x  p-5 name">Name</th>
+                                    <th class="th border-x  p-5 at-sc">Attendance Score</th>
+                                    <th class="th border-x  p-5 pt-sc">Participation Score</th>
+                                    <th class="th border-x  p-5 pj-sc">Projects Score</th>
                                     <th class="th t-sc p-5">Total Score</th>
                                 </tr>
                             </thead>
@@ -89,10 +89,10 @@ let content = () =>
                                 return `
                                 <tr class="tr ${index === 1 ? "odd-tr" : (index % 2 === 0 ? "even-tr" : "odd-tr")} h-16">
                                     <td class="td ">${player.rank}</td>
-                                    <td class="td border-x border-x-amber-50">${player.name}</td>
-                                    <td class="td border-x border-x-amber-50 ">${player.attendance}</td>
-                                    <td class="td border-x border-x-amber-50 ">${player.participation}</td>
-                                    <td class="td border-x border-x-amber-50 ">${player.projects}</td>
+                                    <td class="td border-x">${player.name}</td>
+                                    <td class="td border-x ">${player.attendance}</td>
+                                    <td class="td border-x ">${player.participation}</td>
+                                    <td class="td border-x ">${player.projects}</td>
                                     <td class="td">${player.total}</td>
                                 </tr>`;
                                 }).join("")}

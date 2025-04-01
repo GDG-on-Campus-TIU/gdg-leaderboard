@@ -18,13 +18,19 @@ function getAIMLLeaderboard(){
                 </tr>`}).join("")}
            `;
 }
+function getPlayerName(name){
+    if(name.length >=30){
+        return(name.substring(0,30)+".....");
+    }
+    return name;
+}
 function getLeaderboard(player_details) {
     return `
         ${player_details.map((player, index) => {
             return `
                 <tr class="tr ${index === 1 ? "odd-tr" : (index % 2 === 0 ? "even-tr" : "odd-tr")} h-16">
                     <td class="td">${player.rank}</td>
-                    <td class="td border-x border-x-amber-50">${player.name}</td>
+                    <td class="td border-x border-x-amber-50">${getPlayerName(player.name)}</td>
                     <td class="td border-x border-x-amber-50">${player.attendance}</td>
                     <td class="td border-x border-x-amber-50">${player.participation}</td>
                     <td class="td border-x border-x-amber-50">${player.projects}</td>

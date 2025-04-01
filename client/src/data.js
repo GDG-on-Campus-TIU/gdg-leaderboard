@@ -230,7 +230,7 @@ export let dsa_player_details = [
     },
     {
         "rank": 9,
-        "name": "DSA_Player9",
+        "name": "DSA_Player9zzzzzzzzzzzzzzzzzzzzzzzzaaaaaaaaaaaaaaaa    z",
         "attendance": 1,
         "participation": 8,
         "projects": 36,
