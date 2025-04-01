@@ -1,0 +1,3 @@
+run:
+	@ENV=dev \
+		air

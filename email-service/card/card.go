@@ -55,8 +55,10 @@ func GenerateIDCard(student models.Student) (string, error) {
 		return "", fmt.Errorf("failed to load Space Mono font: %w", err)
 	}
 	ctx.SetRGB(1, 1, 1)
-	deptAndID := fmt.Sprintf("%s - %s", student.Dept, student.ClgID)
-	ctx.DrawStringAnchored(deptAndID, 530, 810, 1, 0.5)
+	ctx.DrawStringAnchored(student.Dept, 530, 810, 1, 0.5)
+
+	ctx.SetRGB(1, 1, 1)
+	ctx.DrawStringAnchored(student.ClgID, 530, 850, 1, 0.5)
 
 	outputPath := filepath.Join("output", fmt.Sprintf("%s_id_card.png", student.ClgID))
 	if err := ctx.SavePNG(outputPath); err != nil {

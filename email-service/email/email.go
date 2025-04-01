@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"html/template"
+	"os"
 	"path/filepath"
 
 	"gopkg.in/gomail.v2"
@@ -37,26 +38,24 @@ func SendEmail(student models.Student) error {
 		return fmt.Errorf("failed to execute email template: %w", err)
 	}
 
-	// Generate the personalized ID card
-	idCardPath, err := card.GenerateIDCard(student)
-	if err != nil {
-		return fmt.Errorf("failed to generate ID card: %w", err)
-	}
-
-	// Set up the email message
 	m := gomail.NewMessage()
+	// Set up the email message
 	m.SetHeader("From", cfg.SenderEmail)
 	m.SetHeader("To", student.Email)
 	m.SetHeader("Subject", "Your Student ID Card")
 	m.SetBody("text/html", body.String())
+
+	idCardPath, err := card.GenerateIDCard(student)
 	m.Attach(idCardPath)
 
 	// Configure the SMTP dialer
 	d := gomail.NewDialer(cfg.SMTPServer, cfg.SMTPPort, cfg.SenderEmail, cfg.AppPassword)
 
-	// Send the email
-	if err := d.DialAndSend(m); err != nil {
-		return fmt.Errorf("failed to send email: %w", err)
+	if os.Getenv("ENV") != "dev" {
+		// Send the email
+		if err := d.DialAndSend(m); err != nil {
+			return fmt.Errorf("failed to send email: %w", err)
+		}
 	}
 
 	fmt.Println("Email sent successfully to", student.Email)

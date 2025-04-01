@@ -10,8 +10,13 @@ import (
 func main() {
 
 	// Load environment variables from .env file
-	if err := godotenv.Load(); err != nil {
-		panic("Error loading .env file")
+	if os.Getenv("ENV") == "dev" {
+		log.Println("Loading environment variables from .env file")
+		if err := godotenv.Load(); err != nil {
+			panic("Error loading .env file")
+		}
+	} else {
+		log.Println("Loading environment variables from system")
 	}
 
 	secretHash := GenerateHash(os.Getenv("ADMIN_SECRET"))

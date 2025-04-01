@@ -38,6 +38,7 @@ func StartServer() {
 		}
 
 		// Process the email sending concurrently
+		log.Printf("Sending email to %s\n", student.Email)
 		go func(s models.Student) {
 			if err := email.SendEmail(s); err != nil {
 				log.Printf("Error sending email to %s: %v\n", s.Email, err)

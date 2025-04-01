@@ -1,0 +1,51 @@
+version: "3.8"
+
+services:
+  email-service:
+    image: email-service:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=:9090
+    secrets:
+      - APP_PASSWORD
+      - ADMIN_SECRET
+      - HASH
+    networks:
+      - email-network
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 1
+        delay: 10s
+        order: start-first
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+        window: 120s
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256M
+        reservations:
+          cpus: "0.25"
+          memory: 128M
+      # Uncomment to place the service on manager nodes only
+      # placement:
+      #   constraints:
+      #     - node.role == manager
+
+networks:
+  email-network:
+    driver: overlay
+
+secrets:
+  APP_PASSWORD:
+    external: true
+  ADMIN_SECRET:
+    external: true
+  HASH:
+    external: true
