@@ -2,4 +2,4 @@
 **logs
 **.env**
 **.vscode/
-/client/src/index.html
+client/src/index.html
