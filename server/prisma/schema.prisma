@@ -1,0 +1,66 @@
+/**
+ * Main schema file for db
+ * models:
+ * - Student
+ * - Score
+ * - Admin
+ * @maintainer Piush Bose <dev.bosepiush@gmail.com>
+ */
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  STUDENT
+  ADMIN
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Student {
+  id        String   @id @default(uuid())
+  name      String
+  clgId     String   @unique
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  score     Score[]
+  role      Role     @default(STUDENT)
+
+  @@index([clgId], name: "student_clgId_index")
+  @@index([email], name: "email_index")
+}
+
+model Score {
+  id                 String   @id @default(uuid())
+  student            Student? @relation(fields: [studentId], references: [id])
+  studentId          String?  @unique
+  domain             String
+  totalScore         Int
+  attendanceScore    Int
+  participationScore Int
+  assignmentScore    Int
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@index([studentId], name: "score_studentId_index")
+}
+
+model Admin {
+  id        String   @id @default(uuid())
+  name      String
+  empId     String   @unique
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  role      Role     @default(ADMIN)
+
+  @@index([empId], name: "admin_empId_index")
+  @@index([email], name: "admin_email_index")
+}
