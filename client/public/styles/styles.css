@@ -247,7 +247,10 @@ input[type="checkbox"] {
 .tr:hover{
     background: rgba(211, 211, 211, 0.2);
 }
-
+.td, .th{
+    border-left-color: #fffbeb46;
+    border-right-color: #fffbeb34;
+}
 .name {
     min-width: 100px;
 }
