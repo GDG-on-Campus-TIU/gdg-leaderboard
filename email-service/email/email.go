@@ -22,24 +22,20 @@ import (
 // The function takes a student object as input, which contains the student's information.
 // The function uses the config package to load SMTP server configuration.
 func SendEmail(student models.Student) error {
-	// Load configuration
 	cfg := config.NewConfig()
 
-	// Load the HTML email template file
 	tmplPath := filepath.Join("templates", "email_template.html")
 	tmpl, err := template.ParseFiles(tmplPath)
 	if err != nil {
 		return fmt.Errorf("failed to parse email template: %w", err)
 	}
 
-	// Execute the template with student data
 	var body bytes.Buffer
 	if err := tmpl.Execute(&body, student); err != nil {
 		return fmt.Errorf("failed to execute email template: %w", err)
 	}
 
 	m := gomail.NewMessage()
-	// Set up the email message
 	m.SetHeader("From", cfg.SenderEmail)
 	m.SetHeader("To", student.Email)
 	m.SetHeader("Subject", "Your Student ID Card")
@@ -48,11 +44,9 @@ func SendEmail(student models.Student) error {
 	idCardPath, err := card.GenerateIDCard(student)
 	m.Attach(idCardPath)
 
-	// Configure the SMTP dialer
 	d := gomail.NewDialer(cfg.SMTPServer, cfg.SMTPPort, cfg.SenderEmail, cfg.AppPassword)
 
 	if os.Getenv("ENV") != "dev" {
-		// Send the email
 		if err := d.DialAndSend(m); err != nil {
 			return fmt.Errorf("failed to send email: %w", err)
 		}
