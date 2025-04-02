@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"html/template"
+	"log"
 	"os"
 	"path/filepath"
 
@@ -52,6 +53,6 @@ func SendEmail(student models.Student) error {
 		}
 	}
 
-	fmt.Println("Email sent successfully to", student.Email)
+	log.Println("Email sent successfully to", student.Email)
 	return nil
 }

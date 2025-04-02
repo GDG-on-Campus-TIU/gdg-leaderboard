@@ -4,6 +4,7 @@
     "dev": "bun run --hot src/index.ts"
   },
   "dependencies": {
+    "@google-cloud/storage": "^7.15.2",
     "@hono/prometheus": "^1.0.1",
     "@prisma/client": "^6.5.0",
     "@types/morgan": "^1.9.9",

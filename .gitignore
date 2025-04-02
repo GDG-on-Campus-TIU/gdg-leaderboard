@@ -4,4 +4,9 @@
 **.vscode/
 client/src/index.html
 
-**tmp/
+email-service/tmp/
+**credentials.json
+
+**.terraform
+**.tfvars
+**.tfplan
