@@ -4,6 +4,7 @@ import (
 	"fmt"
 	_ "image/jpeg"
 	_ "image/png"
+	"os"
 	"path/filepath"
 	"strings"
 
@@ -72,6 +73,8 @@ func GenerateIDCard(student models.Student) (string, error) {
 	if err := ctx.SavePNG(outputPath); err != nil {
 		return "", fmt.Errorf("failed to save ID card: %w", err)
 	}
+
+	go utils.UploadPFPToGCS(os.Getenv("BUCKET_NAME"), outputPath, false)
 
 	return outputPath, nil
 }

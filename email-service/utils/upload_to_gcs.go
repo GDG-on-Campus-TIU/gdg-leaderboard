@@ -14,7 +14,7 @@ import (
 
 // Uplod to gcs
 // return the public url
-func UploadPFPToGCS(bucketName, imagePath string) error {
+func UploadPFPToGCS(bucketName, imagePath string, isPfp bool) error {
 	objectName := strings.Split(imagePath, "/")[len(strings.Split(imagePath, "/"))-1]
 	format := strings.Split(objectName, ".")[1]
 
@@ -32,7 +32,12 @@ func UploadPFPToGCS(bucketName, imagePath string) error {
 	}
 	defer file.Close()
 
-	objectPath := fmt.Sprintf("resized_pfp/%s", objectName)
+	var objectPath string
+	if isPfp {
+		objectPath = fmt.Sprintf("resized_pfp/%s", objectName)
+	} else {
+		objectPath = fmt.Sprintf("id_card/%s", objectName)
+	}
 
 	wc := client.Bucket(bucketName).Object(objectPath).NewWriter(ctx)
 	wc.ContentType = fmt.Sprintf("image/%s", format)

@@ -122,7 +122,7 @@ func DownloadAndResize(url string, std models.Student) image.Image {
 	// @NOTE: Now the caution is over, you can mess with the code below
 
 	// upload to gcs on another thread
-	go UploadPFPToGCS(os.Getenv("BUCKET_NAME"), outputPath)
+	go UploadPFPToGCS(os.Getenv("BUCKET_NAME"), outputPath, true)
 
 	log.Println("Image saved to", outputPath)
 

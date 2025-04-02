@@ -16,6 +16,9 @@ func main() {
 			panic("Error loading .env file")
 		}
 	} else {
+		if err := godotenv.Load(); err != nil {
+			log.Println("Error loading .env file")
+		}
 		log.Println("Loading environment variables from system")
 	}
 
