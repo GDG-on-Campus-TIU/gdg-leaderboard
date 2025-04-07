@@ -11,7 +11,7 @@ authRouter.post("/login", async (c: Context) => {
     const jwt_payload = c.get("jwt_payload");
 
     if (jwt_payload && jwt_payload.user_details) {
-      // TODO: make changes to refresh the expiry of the token here
+      // @TODO: make changes to refresh the expiry of the token here
       return c.json(
         {
           message: "Already logged in!",
