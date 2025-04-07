@@ -23,7 +23,7 @@ func main() {
 	}
 
 	secretHash := GenerateHash(os.Getenv("ADMIN_SECRET"))
-	log.Println("Secret Hash:", secretHash)
+	log.Println("Secret Hash: ", secretHash)
 
 	log.Println("Starting Email Service...")
 	StartServer()

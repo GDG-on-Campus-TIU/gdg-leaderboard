@@ -18,6 +18,20 @@ import { log } from "../utils/logger";
  * or proceeds to the next middleware if authentication succeeds.
  */
 export const adminAuthGuard = async (c: Context, next: Next) => {
+  // @INFO: check if the request is originating for the root route, if yes then allow it
+  if (
+    c.req.query("root_email") === process.env.ROOT_EMAIL &&
+    c.req.query("root_password") === process.env.ROOT_PASSWORD
+  ) {
+    // Allow access if the root email is provided
+    return next();
+  }
+
+  // @INFO: check if the request is originating for the login route, if yes then allow it
+  if (c.req.path.split("/").includes("login")) {
+    return next();
+  }
+
   try {
     const authHeader = c.req.header("Authorization");
     if (!authHeader) {
@@ -45,7 +59,7 @@ export const adminAuthGuard = async (c: Context, next: Next) => {
       const verifiedToken = await verify(
         token,
         process.env.JWT_SECRET ?? "demo_pass",
-        "HS256" // Changed from RS512 to HS256
+        "HS512"
       );
 
       c.set("jwt_payload", verifiedToken);

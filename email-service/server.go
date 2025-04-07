@@ -23,7 +23,7 @@ func StartServer() {
 	router := gin.Default()
 
 	// POST endpoint to process email sending
-	router.POST("/api/send", func(c *gin.Context) {
+	router.POST("/api/id-card/send", func(c *gin.Context) {
 		queryHash := c.Query("h")
 		secretHash := GenerateHash(os.Getenv("ADMIN_SECRET"))
 		if queryHash != secretHash {

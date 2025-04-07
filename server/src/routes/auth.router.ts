@@ -6,6 +6,7 @@ import { log } from "../utils/logger";
 
 const authRouter = new Hono();
 
+// @TODO add zod body validator
 authRouter.post("/login", async (c: Context) => {
   try {
     const jwt_payload = c.get("jwt_payload");
@@ -70,7 +71,7 @@ authRouter.post("/login", async (c: Context) => {
         iat: Math.floor(Date.now() / 1000), // Issued at
       },
       process.env.JWT_SECRET ?? "demo_pass",
-      "HS256"
+      "HS512"
     );
 
     return c.json(
@@ -92,6 +93,7 @@ authRouter.post("/login", async (c: Context) => {
   }
 });
 
+// @TODO add zod body validator
 authRouter.post("/signup", async (c: Context) => {
   try {
     const { name, email, password, clgId } = await c.req.json<{
@@ -128,12 +130,41 @@ authRouter.post("/signup", async (c: Context) => {
 
     const hashedPassword = await Utils.hashPassword(password);
 
+    // @INFO Create student first
     const newStudent = await prisma.student.create({
       data: {
         name,
         email,
         clgId,
         password: hashedPassword,
+      },
+    });
+
+    // @DEMO
+    //
+    // @INFO Create score with relation to student
+    // await prisma.score.create({
+    //   data: {
+    //     assignmentScore: 0,
+    //     attendanceScore: 0,
+    //     domain: "AIML",
+    //     totalScore: 0,
+    //     participationScore: 0,
+    //     student: {
+    //       connect: {
+    //         id: newStudent.id,
+    //       },
+    //     },
+    //   },
+    // });
+
+    // @INFO Fetch the complete student with score for response
+    const studentWithScore = await prisma.student.findUnique({
+      where: {
+        id: newStudent.id,
+      },
+      include: {
+        score: true,
       },
     });
 
@@ -147,18 +178,13 @@ authRouter.post("/signup", async (c: Context) => {
         iat: Math.floor(Date.now() / 1000), // Issued at
       },
       process.env.JWT_SECRET ?? "demo_pass",
-      "HS256" // Changed from RS512 to HS256
+      "HS512"
     );
 
     return c.json(
       {
         message: "User created successfully!",
-        user: {
-          id: newStudent.id,
-          name: newStudent.name,
-          email: newStudent.email,
-          clgId: newStudent.clgId,
-        },
+        user: studentWithScore,
         token,
       },
       201
