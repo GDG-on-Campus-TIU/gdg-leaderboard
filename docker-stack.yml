@@ -1,0 +1,68 @@
+version: "3.9"
+
+services:
+  server:
+    image: server:latest
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "8998:8998"
+    environment:
+      - PORT=8998
+      - NODE_ENV=production
+      - DATABASE_URL=${DATABASE_URL}
+      - JWT_SECRET=${JWT_SECRET}
+      - ROOT_EMAIL=${ROOT_EMAIL}
+      - ROOT_PASSWORD=${ROOT_PASSWORD}
+      - GCP_PROJECT_ID=${GCP_PROJECT_ID}
+    deploy:
+      replicas: 3
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256M
+        reservations:
+          cpus: "0.25"
+          memory: 128M
+    networks:
+      - app-network
+
+  email-service:
+    image: email-service:latest
+    build:
+      context: ./email-service
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - ADMIN_SECRET=${ADMIN_SECRET}
+      - APP_PASSWORD=${APP_PASSWORD}
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256M
+        reservations:
+          cpus: "0.25"
+          memory: 128M
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: overlay

@@ -10,3 +10,5 @@ email-service/tmp/
 **.terraform
 **.tfvars
 **.tfplan
+
+vars.prod

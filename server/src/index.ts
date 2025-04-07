@@ -3,7 +3,7 @@ import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { prettyJSON } from "hono/pretty-json";
 
-import { prometheus } from "@hono/prometheus";
+// import { prometheus } from "@hono/prometheus";
 
 import { mainRouter } from "./routes/_index";
 import { log } from "./utils/logger";
@@ -11,9 +11,10 @@ import { prisma } from "./db/prisma";
 
 // ----------------------------------------------
 // Constants setups
-const { printMetrics, registerMetrics } = prometheus();
+// const { printMetrics, registerMetrics } = prometheus();
 const app = new Hono();
 const API_VER = process.env.API_VER || "/api/v1";
+const METRICS_PORT = process.env.METRICS_PORT || 9090;
 
 // ----------------------------------------------
 //Middlewares setup
@@ -30,15 +31,15 @@ app.use(
     allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
   })
+  // registerMetrics
 );
-app.use("*", registerMetrics);
 
 // ----------------------------------------------
 // Route handlers setup
 app.route(API_VER, mainRouter);
 
 //metrics setup
-app.get(`${API_VER}/metrics`, printMetrics);
+// app.get("/api/v1/metrics", printMetrics); // Expose metrics at the root level
 
 // ----------------------------------------------
 // Error handling setup

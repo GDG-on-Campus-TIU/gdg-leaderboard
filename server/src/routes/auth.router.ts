@@ -1,8 +1,9 @@
 import { Hono, Context } from "hono";
-import { sign } from "hono/jwt";
+import { sign, verify } from "hono/jwt";
 import { prisma } from "../db/prisma";
 import { Utils } from "../utils/hash";
 import { log } from "../utils/logger";
+import { JWTPayload } from "hono/utils/jwt/types";
 
 const authRouter = new Hono();
 
@@ -136,11 +137,12 @@ authRouter.post("/signup", async (c: Context) => {
         name,
         email,
         clgId,
+        idCard: `https://storage.googleapis.com/leaderboard-pfp/id_card/${clgId}_id_card.png`,
         password: hashedPassword,
       },
     });
 
-    // @DEMO
+    // @DEMO - how to create and connect relations in Prisma
     //
     // @INFO Create score with relation to student
     // await prisma.score.create({
@@ -199,6 +201,67 @@ authRouter.post("/signup", async (c: Context) => {
       500
     );
   }
+});
+
+authRouter.get("/me", async (c: Context) => {
+  // @INFO Check if the header is there or not
+  const jwt_payload = c.req.header("Authorization");
+  if (!jwt_payload) {
+    return c.text("Unauthorized", 401);
+  }
+
+  // @INFO check if the token is there or not
+  const token = jwt_payload.split(" ")[1];
+  if (!token) {
+    return c.text("Invalid Authorization format", 401);
+  }
+
+  // @INFO check if the token is valid or not
+  type CustomJWTPayload = JWTPayload & {
+    user_details: {
+      id: string;
+      email: string;
+    };
+  };
+  let decodedToken: CustomJWTPayload;
+  try {
+    decodedToken = (await verify(
+      token,
+      process.env.JWT_SECRET ?? "demo_pass",
+      "HS512"
+    )) as CustomJWTPayload;
+    if (!decodedToken) {
+      return c.text("Invalid token format", 401);
+    }
+  } catch (error) {
+    log.error(`JWT verification error: ${error}`);
+    return c.text("Invalid or expired token", 401);
+  }
+
+  // @INFO extract the user id from the token
+  const { user_details } = decodedToken as CustomJWTPayload;
+
+  const user = await prisma.student.findUnique({
+    where: {
+      id: user_details.id,
+    },
+    include: {
+      score: true,
+      pfp: true,
+    },
+    omit: {
+      password: true,
+    },
+  });
+
+  if (!user) {
+    return c.text("User not found", 404);
+  }
+
+  return c.json({
+    message: "User details fetched successfully",
+    user,
+  });
 });
 
 export { authRouter };
