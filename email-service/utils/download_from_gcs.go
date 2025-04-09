@@ -35,6 +35,12 @@ func DownloadAndResize(url string, std models.Student) image.Image {
 	// Resize the image to 200x200
 	img = resize.Resize(200, 200, img, resize.Lanczos3)
 
+	// @INFO Create directory if it doesn't exist
+	if err := os.MkdirAll("output/resized_pfp", os.ModePerm); err != nil {
+		log.Printf("failed to create directory: %v\n", err)
+		return nil
+	}
+
 	outputPath := filepath.Join("output", "resized_pfp", fmt.Sprintf("%s_pfp.%s", std.ClgID, format))
 
 	// @NOTE: WARNING, don't ever try to mess with the code below

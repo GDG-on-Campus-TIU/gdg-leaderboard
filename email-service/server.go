@@ -22,7 +22,12 @@ func GenerateHash(input string) string {
 func StartServer() {
 	router := gin.Default()
 
-	// POST endpoint to process email sending
+	// @INFO health check endpoint
+	router.GET("/health", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"status": "ok"})
+	})
+
+	// @INFO POST endpoint to process email sending
 	router.POST("/api/id-card/send", func(c *gin.Context) {
 		queryHash := c.Query("h")
 		secretHash := GenerateHash(os.Getenv("ADMIN_SECRET"))
@@ -48,8 +53,8 @@ func StartServer() {
 		c.JSON(http.StatusOK, gin.H{"message": "Email is being processed"})
 	})
 
-	// Start the server on port 8080
-	if err := router.Run(os.Getenv("PORT")); err != nil {
+	// Start the server on port :8080
+	if err := router.Run(":8080"); err != nil {
 		log.Fatalf("Failed to run server: %v", err)
 	}
 }

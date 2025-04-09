@@ -1,6 +1,6 @@
 **node_modules/
 **logs
-**.env**
+**.env
 **.vscode/
 client/src/index.html
 
