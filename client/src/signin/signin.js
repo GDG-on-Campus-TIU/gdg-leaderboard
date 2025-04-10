@@ -10,7 +10,7 @@ let signin = ()=>
                 <link rel="stylesheet" href="/styles/signin/styles.css">    
                 <script src="/scripts/script-signin.js" ></script>
             </head>
-            <h1>GDG SIGNIN PAGE</h1>
+            <h1>SIGN IN TO GDG</h1>
             <div class="container" id="container">
                 <div class="form-container sign-up-container">
                     <form action="#">
