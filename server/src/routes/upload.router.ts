@@ -6,8 +6,9 @@ import { log } from "../utils/logger";
 
 const uploadRouter = new Hono();
 
+// Initialize storage without depending on a file
 const storage = new Storage({
-  projectId: (process.env.GCP_PROJECT_ID as string) ?? "light-ratio-453107-r4",
+  projectId: process.env.GCP_PROJECT_ID || "light-ratio-453107-r4",
   keyFilename: "credentials.json",
 });
 

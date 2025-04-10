@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"html/template"
 	"log"
-	"os"
 	"path/filepath"
 
 	"gopkg.in/gomail.v2"
@@ -47,10 +46,8 @@ func SendEmail(student models.Student) error {
 
 	d := gomail.NewDialer(cfg.SMTPServer, cfg.SMTPPort, cfg.SenderEmail, cfg.AppPassword)
 
-	if os.Getenv("ENV") != "dev" {
-		if err := d.DialAndSend(m); err != nil {
-			return fmt.Errorf("failed to send email: %w", err)
-		}
+	if err := d.DialAndSend(m); err != nil {
+		return fmt.Errorf("failed to send email: %w", err)
 	}
 
 	log.Println("Email sent successfully to", student.Email)

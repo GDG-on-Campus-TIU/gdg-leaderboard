@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/gin-gonic/gin"
 
@@ -29,12 +28,12 @@ func StartServer() {
 
 	// @INFO POST endpoint to process email sending
 	router.POST("/api/id-card/send", func(c *gin.Context) {
-		queryHash := c.Query("h")
-		secretHash := GenerateHash(os.Getenv("ADMIN_SECRET"))
-		if queryHash != secretHash {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
-			return
-		}
+		// queryHash := c.Query("h")
+		// secretHash := GenerateHash(utils.GetEnv("ADMIN_SECRET"))
+		// if queryHash != secretHash {
+		// 	c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		// 	return
+		// }
 
 		var student models.Student
 		if err := c.ShouldBindJSON(&student); err != nil {

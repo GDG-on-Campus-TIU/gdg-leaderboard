@@ -3,6 +3,9 @@ import { Utils } from "../utils/hash";
 import { prisma } from "../db/prisma";
 import { jwt, sign } from "hono/jwt";
 import { log } from "../utils/logger";
+import { getEnv } from "../utils/env";
+
+const JWT_SECRET = getEnv("JWT_SECRET") || "demo_pass";
 
 const adminRouter = new Hono();
 
@@ -71,7 +74,7 @@ adminRouter.post("/login", async (c: Context) => {
           exp: Math.floor(Date.now() / 1000) + 60 * 60, // 1 hour
           iat: Math.floor(Date.now() / 1000), // Issued at
         },
-        process.env.JWT_SECRET ?? "demo_pass",
+        JWT_SECRET,
         "HS512"
       );
     } catch (error) {

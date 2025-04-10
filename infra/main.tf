@@ -54,12 +54,30 @@ resource "google_compute_router_nat" "additional_nat" {
 }
 
 # ----------------------------
+# FIREWALL RULES
+# ----------------------------
+resource "google_compute_firewall" "allow_ssh" {
+  name    = "gdg-leaderboard-allow-ssh"
+  network = google_compute_network.vpc_network.name
+  project = var.project_id
+
+  allow {
+    protocol = "tcp"
+    ports    = ["22"]
+  }
+
+  source_ranges = ["0.0.0.0/0"]
+  target_tags   = ["swarm-node"]
+}
+
+# ----------------------------
 # VM INSTANCES
 # ----------------------------
 resource "google_compute_instance" "public_vm" {
   name         = "public-vm"
   machine_type = "n2-custom-2-6144"
   zone         = var.zone
+  tags         = ["swarm-node"]
 
   boot_disk {
     initialize_params {

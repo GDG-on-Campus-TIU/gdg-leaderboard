@@ -1,13 +1,14 @@
 import { Hono } from "hono";
 import { prisma } from "../db/prisma";
 import { Utils } from "../utils/hash";
+import { getEnv } from "../utils/env";
 
 const rootRouter = new Hono();
 
 rootRouter.post("/create-id", async (c) => {
   if (
-    !(c.req.query("root_email") === process.env.ROOT_EMAIL) &&
-    !(c.req.query("root_password") === process.env.ROOT_PASSWORD)
+    !(c.req.query("root_email") === getEnv("ROOT_EMAIL")) &&
+    !(c.req.query("root_password") === getEnv("ROOT_PASSWORD"))
   ) {
     // Allow access if the root email is provided
     return c.text("Unauthorized", 401);

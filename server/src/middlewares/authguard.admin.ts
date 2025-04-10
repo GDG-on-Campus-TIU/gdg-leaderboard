@@ -1,6 +1,12 @@
 import { Context, Next } from "hono";
 import { decode, verify } from "hono/jwt";
 import { log } from "../utils/logger";
+import { getEnv } from "../utils/env";
+
+const ROOT_EMAIL = getEnv("ROOT_EMAIL");
+const ROOT_PASSWORD = getEnv("ROOT_PASSWORD");
+const ADMIN_TOKEN = getEnv("ADMIN_TOKEN");
+const JWT_SECRET = getEnv("JWT_SECRET") || "demo_pass";
 
 /**
  * Middleware function to guard admin routes.
@@ -20,8 +26,8 @@ import { log } from "../utils/logger";
 export const adminAuthGuard = async (c: Context, next: Next) => {
   // @INFO: check if the request is originating for the root route, if yes then allow it
   if (
-    c.req.query("root_email") === process.env.ROOT_EMAIL &&
-    c.req.query("root_password") === process.env.ROOT_PASSWORD
+    c.req.query("root_email") === ROOT_EMAIL &&
+    c.req.query("root_password") === ROOT_PASSWORD
   ) {
     // Allow access if the root email is provided
     return next();
@@ -44,7 +50,7 @@ export const adminAuthGuard = async (c: Context, next: Next) => {
     }
 
     // Check if it's a direct admin token
-    if (token === process.env.ADMIN_TOKEN) {
+    if (token === ADMIN_TOKEN) {
       // Allow access with admin token
       return next();
     }
@@ -56,11 +62,7 @@ export const adminAuthGuard = async (c: Context, next: Next) => {
 
     try {
       // Verify the token using HS256 algorithm
-      const verifiedToken = await verify(
-        token,
-        process.env.JWT_SECRET ?? "demo_pass",
-        "HS512"
-      );
+      const verifiedToken = await verify(token, JWT_SECRET, "HS512");
 
       c.set("jwt_payload", verifiedToken);
       return next();

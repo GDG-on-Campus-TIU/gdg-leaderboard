@@ -4,6 +4,9 @@ import { prisma } from "../db/prisma";
 import { Utils } from "../utils/hash";
 import { log } from "../utils/logger";
 import { JWTPayload } from "hono/utils/jwt/types";
+import { getEnv } from "../utils/env";
+
+const JWT_SECRET = getEnv("JWT_SECRET") || "demo_pass";
 
 const authRouter = new Hono();
 
@@ -71,7 +74,7 @@ authRouter.post("/login", async (c: Context) => {
         exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24, // 1 day
         iat: Math.floor(Date.now() / 1000), // Issued at
       },
-      process.env.JWT_SECRET ?? "demo_pass",
+      JWT_SECRET,
       "HS512"
     );
 
@@ -179,7 +182,7 @@ authRouter.post("/signup", async (c: Context) => {
         exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24, // 1 day
         iat: Math.floor(Date.now() / 1000), // Issued at
       },
-      process.env.JWT_SECRET ?? "demo_pass",
+      JWT_SECRET,
       "HS512"
     );
 
@@ -227,7 +230,7 @@ authRouter.get("/me", async (c: Context) => {
   try {
     decodedToken = (await verify(
       token,
-      process.env.JWT_SECRET ?? "demo_pass",
+      JWT_SECRET,
       "HS512"
     )) as CustomJWTPayload;
     if (!decodedToken) {

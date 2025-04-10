@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { prettyJSON } from "hono/pretty-json";
+import { getEnv } from "./utils/env";
 
 // import { prometheus } from "@hono/prometheus";
 
@@ -13,8 +14,16 @@ import { prisma } from "./db/prisma";
 // Constants setups
 // const { printMetrics, registerMetrics } = prometheus();
 const app = new Hono();
-const API_VER = process.env.API_VER || "/api/v1";
-const METRICS_PORT = process.env.METRICS_PORT || 9090;
+const API_VER = getEnv("API_VER") || "/api/v1";
+const PORT = getEnv("PORT") || 3000;
+const METRICS_PORT = getEnv("METRICS_PORT") || 9090;
+
+// Update other environment variables
+const JWT_SECRET = getEnv("JWT_SECRET");
+const DATABASE_URL = getEnv("DATABASE_URL");
+const ROOT_EMAIL = getEnv("ROOT_EMAIL");
+const ROOT_PASSWORD = getEnv("ROOT_PASSWORD");
+const GCP_PROJECT_ID = getEnv("GCP_PROJECT_ID");
 
 // ----------------------------------------------
 //Middlewares setup
@@ -27,7 +36,7 @@ app.use(
 app.use(
   "*",
   cors({
-    origin: ["localhost:3000"],
+    origin: ["*"],
     allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
   })
@@ -95,6 +104,6 @@ process.on("unhandledRejection", async (reason) => {
 
 // ----------------------------------------------
 export default {
-  port: process.env.PORT || 3000,
+  port: PORT,
   fetch: app.fetch,
 };
