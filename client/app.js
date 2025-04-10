@@ -1,23 +1,10 @@
 import express from "express";
-import content from "./src/content.js";
-import { aiml_player_details } from "./src/data.js";
-import { dsa_player_details } from "./src/data.js";
-import { cloud_player_details } from "./src/data.js";
-import { webd_player_details } from "./src/data.js";
-function getAIMLLeaderboard(){
-    return `
-            ${aiml_player_details.map((player)=>{
-            return `
-                <tr>
-                    <td class="td">${player.rank}</td>
-                    <td class="td">${player.name}</td>
-                    <td class="td">${player.attendance}</td>
-                    <td class="td">${player.participation}</td>
-                    <td class="td">${player.projects}</td>
-                    <td class="td">${player.total}</td>
-                </tr>`}).join("")}
-           `;
-}
+import content from "./src/leaderboard/leaderboard.js";
+import { aiml_player_details } from "./src/leaderboard/data.js";
+import { dsa_player_details } from "./src/leaderboard/data.js";
+import { cloud_player_details } from "./src/leaderboard/data.js";
+import { webd_player_details } from "./src/leaderboard/data.js";
+import signin from "./src/signin/signin.js";
 function getPlayerName(name){
     if(name.length >=30){
         return(name.substring(0,30)+".....");
@@ -29,11 +16,11 @@ function getLeaderboard(player_details) {
         ${player_details.map((player, index) => {
             return `
                 <tr class="tr ${index === 1 ? "odd-tr" : (index % 2 === 0 ? "even-tr" : "odd-tr")} h-16">
-                    <td class="td">${player.rank}</td>
-                    <td class="td border-x border-x-amber-50">${getPlayerName(player.name)}</td>
-                    <td class="td border-x border-x-amber-50">${player.attendance}</td>
-                    <td class="td border-x border-x-amber-50">${player.participation}</td>
-                    <td class="td border-x border-x-amber-50">${player.projects}</td>
+                    <td class="td p-5">${player.rank}</td>
+                    <td class="td border-x p-5">${getPlayerName(player.name)}</td>
+                    <td class="td border-x p-5">${player.attendance}</td>
+                    <td class="td border-x p-5">${player.participation}</td>
+                    <td class="td border-x p-5">${player.projects}</td>
                     <td class="td">${player.total}</td>
                 </tr>`;
         }).join("")}
@@ -63,6 +50,9 @@ app.get("/cloud-leaderboard", (req,res)=>{
 })
 app.get("/webd-leaderboard", (req,res)=>{
     res.send(webdLeaderboard);
+})
+app.get("/signin", (req,res)=>{
+    res.send(signin());
 })
 app.listen(3001, () => {
     console.log("Server is running on http://localhost:3001");

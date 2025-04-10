@@ -7,12 +7,12 @@ let content = () =>
     <script src="https://unpkg.com/htmx.org@2.0.4"
         integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+"
         crossorigin="anonymous"></script>
-    <script src="script.js"></script>
+    <script src="/scripts/script-leaderboard.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="styles.css">
-    <link href="output.css" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/leaderboard/styles.css">
+    <link href="/styles/leaderboard/output-leaderboard.css" rel="stylesheet">
 </head>
 
 <body>
@@ -38,39 +38,28 @@ let content = () =>
                     <h1>LEADERBOARD</h1>
                 </div>
                 <div class="checkboxes-container flex justify-center mb-5">
-                    <div class="all-checkbox-container mx-5 mb-0.5 checkbox-ele">
-                        <input type="checkbox" id="all" value="all" checked onchange="selectOnlyThis(this)"
-                            hx-get="/all-leaderboard" hx-target="#leaderboard-body" />
-                        <label for="all">ALL</label><br>
+                    <div class="all-checkbox-container mx-5 mb-0.5 chip">
+                        <input type="radio" id="all" name="chipGroup" value="all" class="chip-radio" onchange="selectOnlyThis(this)" hx-get="/all-leaderboard" hx-target="#leaderboard-body" checked/>
+                        <label for="all" class="chip-label">ALL</label>
                     </div>
-                    <div class="aiml-checkbox-container mx-5 mb-0.5">
-                        <input type="checkbox" id="aiml" value="AI-ML" onchange="selectOnlyThis(this)"
-                            hx-get="/aiml-leaderboard" hx-target="#leaderboard-body" /><br
-                            class="aiml-checkbox-break hidden">
-                        <label for="aiml">AI-ML</label><br>
+                    <div class="aiml-checkbox-container mx-5 mb-0.5 chip">
+                        <input type="radio" id="aiml" name="chipGroup" value="AI-ML" class="chip-radio" onchange="selectOnlyThis(this)" hx-get="/aiml-leaderboard" hx-target="#leaderboard-body" />
+                        <label for="aiml" class="chip-label">AI-ML</label>
                     </div>
-                    <div class="dsa-checkbox-container mx-5 mb-0.5">
-                        <input type="checkbox" id="dsa" value="DSA" onchange="selectOnlyThis(this)"  hx-get="/dsa-leaderboard" hx-target="#leaderboard-body"/>
-                        <label for="dsa">DSA</label><br>
+                    <div class="dsa-checkbox-container mx-5 mb-0.5 chip">
+                        <input type="radio" id="dsa" name="chipGroup" value="DSA" class="chip-radio" onchange="selectOnlyThis(this)" hx-get="/dsa-leaderboard" hx-target="#leaderboard-body" />
+                        <label for="dsa" class="chip-label">DSA</label>
                     </div>
-                    <div class="cloud-checkbox-container mx-5 mb-0.5">
-                        <input type="checkbox" id="cloud" value="CLOUD" onchange="selectOnlyThis(this)"  hx-get="/cloud-leaderboard" hx-target="#leaderboard-body"/>
-                        <label for="cloud">Cloud</label><br>
+                    <div class="cloud-checkbox-container mx-5 mb-0.5 chip">
+                        <input type="radio" id="cloud" name="chipGroup" value="CLOUD" class="chip-radio" onchange="selectOnlyThis(this)" hx-get="/cloud-leaderboard" hx-target="#leaderboard-body" />
+                        <label for="cloud" class="chip-label">Cloud</label>
                     </div>
-                    <div class="webd-checkbox-container mx-5 mb-0.5">
-                        <input type="checkbox" id="webd" value="WEBD" onchange="selectOnlyThis(this)"  hx-get="/webd-leaderboard" hx-target="#leaderboard-body"/>
-                        <label for="webd">Web-Development</label><br>
+                    <div class="webd-checkbox-container mx-5 mb-0.5 chip">
+                        <input type="radio" id="webd" name="chipGroup" value="WEBD" class="chip-radio" onchange="selectOnlyThis(this)" hx-get="/webd-leaderboard" hx-target="#leaderboard-body" />
+                        <label for="webd" class="chip-label">Web-Development</label>
                     </div>
                 </div>
 
-                <script>
-                    function selectOnlyThis(checkbox) {
-                        const checkboxes = document.querySelectorAll('.checkboxes-container input[type="checkbox"]');
-                        checkboxes.forEach((cb) => {
-                            if (cb !== checkbox) cb.checked = false;
-                        });
-                    }
-                </script>
                 <div class="leaderboard-parent flex overflow-hidden">
                     <div class="leaderboard-container block ml-auto mr-auto ">
                         <table class="leaderboard-table p-10">
@@ -88,12 +77,12 @@ let content = () =>
                                 ${player_details.map((player, index) => {
                                 return `
                                 <tr class="tr ${index === 1 ? "odd-tr" : (index % 2 === 0 ? "even-tr" : "odd-tr")} h-16">
-                                    <td class="td ">${player.rank}</td>
-                                    <td class="td border-x">${player.name}</td>
-                                    <td class="td border-x ">${player.attendance}</td>
-                                    <td class="td border-x ">${player.participation}</td>
-                                    <td class="td border-x ">${player.projects}</td>
-                                    <td class="td">${player.total}</td>
+                                    <td class="td p-5">${player.rank}</td>
+                                    <td class="td border-x p-5">${player.name}</td>
+                                    <td class="td border-x p-5">${player.attendance}</td>
+                                    <td class="td border-x p-5">${player.participation}</td>
+                                    <td class="td border-x p-5">${player.projects}</td>
+                                    <td class="td p-5">${player.total}</td>
                                 </tr>`;
                                 }).join("")}
                             </tbody>
