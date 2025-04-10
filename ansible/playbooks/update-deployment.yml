@@ -1,0 +1,16 @@
+---
+- name: Pull latest image and update Swarm service
+  hosts: managers
+  become: true
+  tasks:
+    # @TODO update the image
+    - name: Pull the latest image
+      command: sudo docker pull devpiush/py_system_monitoring_app:latest
+
+    # @TODO update the image
+    - name: Update the Swarm service with the latest image
+      command: sudo docker service update --image devpiush/py_system_monitoring_app:latest sw_app
+
+    - name: Wait for 10 seconds for service stabilization
+      pause:
+        seconds: 10

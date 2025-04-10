@@ -1,11 +1,9 @@
-version: "3.9"
-
 services:
   server:
-    image: server:latest
-    build:
-      context: ./server
-      dockerfile: Dockerfile
+    image: devpiush/gdg-leaderboard-server:latest
+    # build:
+    #   context: ./server
+    #   dockerfile: Dockerfile
     ports:
       - "8998:8998"
     environment:
@@ -23,7 +21,7 @@ services:
         delay: 10s
       restart_policy:
         condition: on-failure
-        max_attempts: 3
+        max_attempts: 5
       resources:
         limits:
           cpus: "0.5"
@@ -35,10 +33,10 @@ services:
       - app-network
 
   email-service:
-    image: email-service:latest
-    build:
-      context: ./email-service
-      dockerfile: Dockerfile
+    image: devpiush/gdg-email-service:latest
+    # build:
+    #   context: ./email-service
+    #   dockerfile: Dockerfile
     ports:
       - "8080:8080"
     environment:
@@ -46,7 +44,7 @@ services:
       - ADMIN_SECRET=${ADMIN_SECRET}
       - APP_PASSWORD=${APP_PASSWORD}
     deploy:
-      replicas: 2
+      replicas: 3
       update_config:
         parallelism: 1
         delay: 10s

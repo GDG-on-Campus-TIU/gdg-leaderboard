@@ -1,0 +1,13 @@
+[servers]
+35.244.57.56
+34.100.217.184
+
+[managers]
+34.100.217.184
+
+[workers]
+35.244.57.56
+
+[swarm:children]
+managers
+workers

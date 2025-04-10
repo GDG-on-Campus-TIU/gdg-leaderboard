@@ -79,7 +79,7 @@ uploadRouter.post("/pfp", async (c) => {
     });
 
     blobStream.on("error", (err) => {
-      console.error(err);
+      log.error(err);
       return c.text("Upload failed", 500);
     });
 
@@ -111,9 +111,11 @@ uploadRouter.post("/pfp", async (c) => {
         },
       });
     } catch (error) {
-      console.error(error);
+      log.error(error);
       return c.text("Database upload failed", 500);
     }
+
+    log.info(`File uploaded successfully: ${fileName}`);
 
     return c.json(
       {
