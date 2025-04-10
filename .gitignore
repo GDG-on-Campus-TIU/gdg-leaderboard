@@ -12,4 +12,4 @@ email-service/tmp/
 **.tfplan
 
 vars.prod
-test
+/test/
