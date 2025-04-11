@@ -7,10 +7,17 @@ import { log } from "../utils/logger";
 const uploadRouter = new Hono();
 
 // Initialize storage without depending on a file
-const storage = new Storage({
-  projectId: process.env.GCP_PROJECT_ID || "light-ratio-453107-r4",
-  keyFilename: "credentials.json",
-});
+let storage: Storage;
+if (process.env.CLOUD_RUN_ENV === "yes") {
+  storage = new Storage({
+    projectId: process.env.GCP_PROJECT_ID,
+  });
+} else {
+  storage = new Storage({
+    projectId: process.env.GCP_PROJECT_ID || "light-ratio-453107-r4",
+    keyFilename: "credentials.json",
+  });
+}
 
 const bucket = storage.bucket("leaderboard-pfp");
 
