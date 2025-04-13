@@ -24,8 +24,6 @@ COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=builder /app/email-service /app/
 COPY --from=builder /app/assets/* /app/assets/
 COPY --from=builder /app/templates/* /app/templates/
-# COPY --from=builder /app/output/* /app/output/
-# COPY --from=builder /app/output/resized_pfp/ /app/output/resized_pfp/
 
 ENV GO_PORT=":8080"
 ENV APP_PASSWORD=${APP_PASSWORD}
