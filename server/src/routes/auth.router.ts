@@ -145,6 +145,7 @@ authRouter.post("/signup", async (c: Context) => {
       },
     });
 
+    // @NOTE --------------------------------------------------------
     // @INFO Domains
     const DOMAINS = [
       "CLOUD",
@@ -308,24 +309,7 @@ authRouter.post("/signup", async (c: Context) => {
           break;
       }
     }
-
-    // @DEMO - how to create and connect relations in Prisma
-    //
-    // @INFO Create score with relation to student
-    // await prisma.score.create({
-    //   data: {
-    //     assignmentScore: 0,
-    //     attendanceScore: 0,
-    //     domain: "AIML",
-    //     totalScore: 0,
-    //     participationScore: 0,
-    //     student: {
-    //       connect: {
-    //         id: newStudent.id,
-    //       },
-    //     },
-    //   },
-    // });
+    // @NOTE --------------------------------------------------------
 
     // @INFO Fetch the complete student with score for response
     const studentWithScore = await prisma.student.findUnique({
