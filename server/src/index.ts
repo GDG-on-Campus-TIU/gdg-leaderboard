@@ -33,9 +33,32 @@ app.use(
     log.http(msg, ...rest);
   })
 );
+// app.use(
+//   cors({
+//     origin: ["*", "localhost:3001", "gdgtiu.org"],
+//     allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+//     credentials: true,
+//   })
+// );
 app.use(
   cors({
-    origin: ["*", "localhost:3001", "gdgtiu.org"],
+    origin: (origin) => {
+      if (!origin) return null;
+
+      const allowedLocalOrigins = ["http://localhost:3001"];
+      const allowedBaseDomain = "gdgtiu.org";
+
+      const isLocal = allowedLocalOrigins.includes(origin);
+      const isGdgtiuSubdomain =
+        origin.endsWith(`.${allowedBaseDomain}`) ||
+        origin === `https://${allowedBaseDomain}`;
+
+      if (isLocal || isGdgtiuSubdomain) {
+        return origin; // allow this origin
+      }
+
+      return null; // block others
+    },
     allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
   })
