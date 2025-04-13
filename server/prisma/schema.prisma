@@ -158,7 +158,7 @@ model Student {
 model Score {
   id                 String   @id @default(uuid())
   student            Student? @relation(fields: [studentId], references: [id])
-  studentId          String?  @unique
+  studentId          String?
   domain             Domain
   totalScore         Int
   attendanceScore    Int
@@ -166,8 +166,6 @@ model Score {
   assignmentScore    Int
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
-
-  @@index([studentId], name: "score_studentId_index")
 }
 
 model Admin {
