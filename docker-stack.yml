@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 services:
   server:
     image: devpiush/gdg-leaderboard-server:latest
@@ -64,3 +65,93 @@ services:
 networks:
   app-network:
     driver: overlay
+=======
+services:
+  server:
+    image: devpiush/gdg-leaderboard-server:latest
+    ports:
+      - published: 8998
+        target: 8998
+    environment:
+      - PORT=8998
+      - NODE_ENV=production
+      - DATABASE_URL_FILE=/run/secrets/database_url
+      - JWT_SECRET_FILE=/run/secrets/jwt_secret
+      - ROOT_EMAIL_FILE=/run/secrets/root_email
+      - ROOT_PASSWORD_FILE=/run/secrets/root_password
+      - GCP_PROJECT_ID_FILE=/run/secrets/gcp_project_id
+    secrets:
+      - database_url
+      - jwt_secret
+      - root_email
+      - root_password
+      - gcp_project_id
+    deploy:
+      replicas: 3
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+        max_attempts: 5
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256M
+        reservations:
+          cpus: "0.25"
+          memory: 128M
+    networks:
+      - app-network
+
+  email-service:
+    image: devpiush/gdg-leaderboard-email-service:latest
+    ports:
+      - published: 8080
+        target: 8080
+    environment:
+      - PORT=8080
+      - SENDER_EMAIL_FILE=/run/secrets/sender_email
+      - ADMIN_SECRET_FILE=/run/secrets/admin_secret
+      - APP_PASSWORD_FILE=/run/secrets/app_password
+    secrets:
+      - admin_secret
+      - app_password
+    deploy:
+      replicas: 3
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256M
+        reservations:
+          cpus: "0.25"
+          memory: 128M
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: overlay
+
+secrets:
+  database_url:
+    external: true
+  jwt_secret:
+    external: true
+  root_email:
+    external: true
+  root_password:
+    external: true
+  gcp_project_id:
+    external: true
+  admin_secret:
+    external: true
+  app_password:
+    external: true
+>>>>>>> 1bcc234c578f82fb7578181fb457d74e32a5fe49
