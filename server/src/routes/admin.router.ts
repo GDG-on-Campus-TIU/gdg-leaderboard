@@ -4,7 +4,7 @@ import { prisma } from "../db/prisma";
 import { jwt, sign } from "hono/jwt";
 import { log } from "../utils/logger";
 import { getEnv } from "../utils/env";
-import { adminAuthGuard } from "../middlewares/authguard.admin";
+import { Middlewares } from "../middlewares/authguard";
 
 const JWT_SECRET = getEnv("JWT_SECRET") || "demo_pass";
 
@@ -115,8 +115,20 @@ adminRouter.post("/login", async (c: Context) => {
 
 // @INFO this should receive user details like email or user id or college id to identify the user and create scoring for that user
 // @TODO complete these routes
-adminRouter.post("/add-score", adminAuthGuard, async (c: Context) => {});
-adminRouter.post("/update-score", adminAuthGuard, async (c: Context) => {});
-adminRouter.post("/generate-score", adminAuthGuard, async (c: Context) => {});
+adminRouter.post(
+  "/add-score",
+  Middlewares.adminGuard,
+  async (c: Context) => {}
+);
+adminRouter.post(
+  "/update-score",
+  Middlewares.adminGuard,
+  async (c: Context) => {}
+);
+adminRouter.post(
+  "/generate-score",
+  Middlewares.adminGuard,
+  async (c: Context) => {}
+);
 
 export { adminRouter };

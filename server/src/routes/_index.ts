@@ -2,9 +2,9 @@ import { Hono } from "hono";
 import { authRouter } from "./auth.router";
 import { healthRouter } from "./health.route";
 import { adminRouter } from "./admin.router";
-import { adminAuthGuard } from "../middlewares/authguard.admin";
 import { uploadRouter } from "./upload.router";
 import { rootRouter } from "./root.router";
+import { Middlewares } from "../middlewares/authguard";
 
 const mainRouter = new Hono();
 
@@ -17,7 +17,7 @@ mainRouter.route("/health", healthRouter);
 mainRouter.route("/upload", uploadRouter);
 
 // Protecting admin routes
-mainRouter.use("/admin/*", adminAuthGuard);
+mainRouter.use("/admin/*", Middlewares.adminGuard);
 mainRouter.route("/admin", adminRouter);
 
 mainRouter.route("/root", rootRouter);

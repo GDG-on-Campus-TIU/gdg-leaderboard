@@ -23,7 +23,7 @@ const JWT_SECRET = getEnv("JWT_SECRET") || "demo_pass";
  * @returns { Promise<Response | void> } Returns a response with error message if unauthorized,
  * or proceeds to the next middleware if authentication succeeds.
  */
-export const adminAuthGuard = async (c: Context, next: Next) => {
+export const authGuard = async (c: Context, next: Next) => {
   // @INFO: check if the request is originating for the root route, if yes then allow it
   if (
     c.req.query("root_email") === ROOT_EMAIL &&
@@ -49,12 +49,6 @@ export const adminAuthGuard = async (c: Context, next: Next) => {
       return c.text("Invalid Authorization format", 401);
     }
 
-    // Check if it's a direct admin token
-    if (token === ADMIN_TOKEN) {
-      // Allow access with admin token
-      return next();
-    }
-
     const decodedToken = decode(token);
     if (!decodedToken) {
       return c.text("Invalid token format", 401);
@@ -74,4 +68,63 @@ export const adminAuthGuard = async (c: Context, next: Next) => {
     log.error(`Auth guard error: ${error}`);
     return c.text("Authentication error", 500);
   }
+};
+
+const adminGuard = async (c: Context, next: Next) => {
+  /**
+   * @INFO: check if the request is originating for the root route, if yes then allow it
+   */
+  if (
+    c.req.query("root_email") === ROOT_EMAIL &&
+    c.req.query("root_password") === ROOT_PASSWORD
+  ) {
+    return next();
+  }
+
+  /**
+   * @INFO: check if the request is originating for the admin login route, if yes then allow it
+   */
+  if (c.req.path.split("/").includes("login")) {
+    return next();
+  }
+
+  const authHeader = c.req.header("Authorization");
+  if (!authHeader) {
+    return c.text("Unauthorized", 401);
+  }
+
+  const token = authHeader.split(" ")[1];
+  if (!token) {
+    return c.text("Invalid Authorization format", 401);
+  }
+
+  const decodedToken = decode(token);
+  if (!decodedToken) {
+    return c.text("Invalid token format", 401);
+  }
+
+  try {
+    // Verify the token using HS512 algorithm
+    const verifiedToken = await verify(token, JWT_SECRET, "HS512");
+
+    if (!(verifiedToken as any).admin_details) {
+      return c.text("Unauthorized", 401);
+    }
+
+    c.set("jwt_payload", verifiedToken);
+
+    return next();
+  } catch (error) {
+    log.error(`JWT verification error: ${error}`);
+    return c.text("Invalid or expired token", 401);
+  }
+};
+
+/**
+ * Middleware function to guard admin routes.
+ * It checks if the request has a valid JWT token in the Authorization header.
+ */
+export const Middlewares = {
+  authGuard,
+  adminGuard,
 };
