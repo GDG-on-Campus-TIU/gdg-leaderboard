@@ -1,4 +1,4 @@
-let signin = ()=>
+let signin = () =>
     /*html*/`
         <!DOCTYPE html>
         <html>
@@ -13,7 +13,7 @@ let signin = ()=>
             <h1>SIGN IN TO GDG</h1>
             <div class="container" id="container">
                 <div class="form-container sign-up-container">
-                    <form action="#">
+                    <form id="signupForm" method="POST">
                         <h1>Create Account</h1>
                         <div class="social-container">
                             <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
@@ -57,7 +57,36 @@ let signin = ()=>
                     </div>
                 </div>
             </div>
+            <script>
+                const form = document.getElementById('signupForm');
+                form.addEventListener('submit', async function (e) 
+                {
+                    e.preventDefault();
+                    // Extract data for JSON
+                    const formData = new FormData(form);
+                    const jsonData = {
+                        name: formData.get('name'),
+                        email: formData.get('email'),
+                        password: formData.get('password'),
+                        clgId: formData.get('clgId')
+                    };
+                    const signupRes = await fetch ('https://gdg-leaderboard-server-1019775793519.us-central1.run.app/api/v1', {
+                        method: "POST",
+                        headers:{
+                            'Content-Type': 'application/json',
+                            'HX-Request': 'true'
+                        }
+                        body: JSON.stringify(jsonData)
+                    });
+                    if (!signupRes.ok) {
+                        console.log('Signup failed!');
+                        return;
+                    }
+                    else{
+                        console.log("signup done")
+                    }
+                })
+            </script>
         </html>
     `
-
 export default signin;
