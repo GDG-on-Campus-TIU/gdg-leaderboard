@@ -36,7 +36,7 @@ app.use(
 app.use(
   "*",
   cors({
-    origin: ["*", "localhost:3001"],
+    origin: ["*", "localhost:3001", "gdgtiu.org"],
     allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
   })
