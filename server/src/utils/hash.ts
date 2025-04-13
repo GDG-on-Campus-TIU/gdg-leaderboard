@@ -8,9 +8,9 @@ import bcrypt from "bcryptjs";
  * ```
  *
  * @param password - The password to be hashed.
- * @returns { String } - The hashed password.
+ * @returns { string } - The hashed password.
  */
-const hashPassword = async (password: string) => {
+const hashPassword = async (password: string): Promise<string> => {
   const saltRounds = 10;
   const hashedPassword = await bcrypt.hash(password, saltRounds);
   return hashedPassword;
@@ -25,9 +25,12 @@ const hashPassword = async (password: string) => {
  *
  * @param password - The password to be compared.
  * @param hashedPassword - The hashed password to compare against.
- * @returns { Boolean } - True if the password matches the hashed password, false otherwise.
+ * @returns { boolean } - True if the password matches the hashed password, false otherwise.
  */
-const comparePassword = async (password: string, hashedPassword: string) => {
+const comparePassword = async (
+  password: string,
+  hashedPassword: string
+): Promise<boolean> => {
   const isMatch = await bcrypt.compare(password, hashedPassword);
   return isMatch;
 };

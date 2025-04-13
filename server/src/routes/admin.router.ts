@@ -113,6 +113,7 @@ adminRouter.post("/login", async (c: Context) => {
 });
 
 // @INFO this should receive user details like email or user id or college id to identify the user and create scoring for that user
+// @TODO complete these routes
 adminRouter.post("/add-score", async (c: Context) => {});
 adminRouter.post("/update-score", async (c: Context) => {});
 
