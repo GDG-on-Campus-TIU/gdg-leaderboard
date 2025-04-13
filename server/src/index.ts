@@ -36,7 +36,7 @@ app.use(
 app.use(
   "*",
   cors({
-    origin: ["*"],
+    origin: ["*", "localhost:3001"],
     allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
   })
