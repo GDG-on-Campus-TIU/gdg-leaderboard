@@ -67,6 +67,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 
@@ -85,13 +86,26 @@ func StartServer() {
 
 	// @INFO cors middleware to allow requests from any origin
 	router.Use(func(c *gin.Context) {
-		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
-		c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+		origin := c.Request.Header.Get("Origin")
+		if origin == "" {
+			c.Next()
+			return
+		}
+
+		// Allow only gdgtiu.org and its subdomains + localhost
+		if origin == "http://localhost:3001" || strings.HasSuffix(origin, ".gdgtiu.org") || origin == "https://gdgtiu.org" {
+			c.Writer.Header().Set("Access-Control-Allow-Origin", origin)
+			c.Writer.Header().Set("Access-Control-Allow-Credentials", "true") // only if needed
+		}
+
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE")
 		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+
 		if c.Request.Method == http.MethodOptions {
 			c.AbortWithStatus(http.StatusNoContent)
 			return
 		}
+
 		c.Next()
 	})
 
