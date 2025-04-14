@@ -69,6 +69,7 @@ uploadRouter.post("/pfp", async (c) => {
     fileName = fileName.replace(/^-+|-+$/g, ""); // Remove leading/trailing dashes
     fileName = fileName.replace(/_/g, "-"); // Replace underscores with dashes
     fileName = fileName.toLowerCase(); // Convert to lowercase
+    fileName = `${fileName}_${clgId}_${Date.now()}`; // Append timestamp to avoid collisions
 
     log.info(`Transformed file name: ${fileName}`);
 

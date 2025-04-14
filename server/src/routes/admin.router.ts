@@ -6,6 +6,17 @@ import { log } from "../utils/logger";
 import { getEnv } from "../utils/env";
 import { Middlewares } from "../middlewares/_index";
 
+const domains = [
+  "CLOUD",
+  "AIML",
+  "BLOCKCHAIN",
+  "DEVOPS",
+  "DSA",
+  "WEB",
+  "ANDROID",
+  "IOT",
+  "CYBERSECURITY",
+];
 const JWT_SECRET = getEnv("JWT_SECRET") || "demo_pass";
 
 const adminRouter = new Hono();
@@ -147,6 +158,7 @@ adminRouter.post(
         404
       );
     }
+
     const { domain, attendance_score, participation_score, assignment_score } =
       await c.req.json<{
         domain: string;
@@ -154,6 +166,15 @@ adminRouter.post(
         participation_score: number;
         assignment_score: number;
       }>();
+
+    if (!domains.includes(domain)) {
+      return c.json(
+        {
+          message: "Invalid domain provided!",
+        },
+        400
+      );
+    }
 
     if (
       !domain ||
@@ -264,18 +285,6 @@ adminRouter.post(
     const existingDomains = new Set(
       existingScores.map((score) => score.domain)
     );
-
-    const domains = [
-      "CLOUD",
-      "AIML",
-      "BLOCKCHAIN",
-      "DEVOPS",
-      "DSA",
-      "WEB",
-      "ANDROID",
-      "IOT",
-      "CYBERSECURITY",
-    ];
 
     // Create promises array for domains that don't exist yet
     const scorePromises = domains.map(async (domain) => {
