@@ -1,4 +1,55 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // handleSignup();
+    const form = document.getElementById('signupForm');
+    form.addEventListener('submit', async function (e) 
+    {
+        e.preventDefault();
+        // Extract data for JSON
+        const formData = new FormData(form);
+        console.log(formData);
+        
+        const jsonData = {
+            name: formData.get('name'),
+            email: formData.get('email'),
+            password: formData.get('password'),
+            clgId: formData.get('clgId')
+        };
+        const pfpFormData = new FormData(form);
+        pfpFormData.append('file', formData.get('pfp'));
+        pfpFormData.append('clg_id', formData.get('clgId'));
+        console.log("file:",pfpFormData.get('file'));
+        console.log(jsonData);
+        const signupRes = await fetch ('https://gdg-leaderboard-server-1019775793519.us-central1.run.app/api/v1/auth/signup', {
+            method: "POST",
+            headers:{
+                'Content-Type': 'application/json',
+                'HX-Request': 'true'
+            },
+            body: JSON.stringify(jsonData)
+        });
+        if (!signupRes.ok) {
+            console.log('Signup failed!');
+            return;
+        }
+        else{
+            console.log("signup done")
+            const pfpFormData = new FormData(form);
+            pfpFormData.append('file', formData.get('pfp'));
+            pfpFormData.append('clg_id', formData.get('clgId'));
+            console.log(pfpFormData);
+            const sendPfpRes = await fetch ('https://gdg-leaderboard-server-1019775793519.us-central1.run.app/api/v1/upload/pfp', {
+                method: "POST",
+                body: pfpFormData
+            });
+            if (!sendPfpRes.ok) {
+                console.log('PFP failed!');
+                return;
+            }
+            else{
+                console.log("PFP done")
+            }
+        }
+    })
     const signUpButton = document.getElementById('signUp');
     const signInButton = document.getElementById('signIn');
     const container = document.getElementById('container');
@@ -48,60 +99,11 @@ function pfp_check() {
             let htmlPreview =
                 '<img class="preview-img" src="' + e.target.result + '" />' ;
             let boxZone = document.querySelector(".pfp-wrapper");
-            boxZone.innerHTML = "";
+            let input = document.querySelector("#fileInput");
+            input.style.display = "none";
             boxZone.insertAdjacentHTML("beforeend", htmlPreview);
         };
 
         reader.readAsDataURL(input.files[0]);
     }
-}
-
-function handleSignup(){
-    const form = document.getElementById('signupForm');
-    form.addEventListener('submit', async function (e) 
-    {
-        e.preventDefault();
-        // Extract data for JSON
-        const formData = new FormData(form);
-        console.log(formData);
-        
-        const jsonData = {
-            name: formData.get('name'),
-            email: formData.get('email'),
-            password: formData.get('password'),
-            clgId: formData.get('clgId')
-        };
-        console.log(jsonData);
-        const signupRes = await fetch ('https://gdg-leaderboard-server-1019775793519.us-central1.run.app/api/v1/auth/signup', {
-            method: "POST",
-            headers:{
-                'Content-Type': 'application/json',
-                'HX-Request': 'true'
-            },
-            body: JSON.stringify(jsonData)
-        });
-        if (!signupRes.ok) {
-            console.log('Signup failed!');
-            return;
-        }
-        else{
-            console.log("signup done")
-            const pfpFormData = new FormData(form);
-            pfpFormData.append('file', formData.get('pfp'));
-            pfpFormData.append('clg_id', formData.get('clgId'));
-            console.log(pfpFormData);
-            const sendPfpRes = await fetch ('https://gdg-leaderboard-server-1019775793519.us-central1.run.app/api/v1/upload/pfp', {
-                method: "POST",
-                body: pfpFormData
-            });
-            if (!sendPfpRes.ok) {
-                console.log('PFP failed!');
-                return;
-            }
-            else{
-                console.log("PFP done")
-            }
-        }
-    })
-
 }
