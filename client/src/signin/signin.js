@@ -2,25 +2,31 @@ let signin = () =>
     /*html*/`
         <!DOCTYPE html>
         <html>
-
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <title>Document</title>
-                <link rel="stylesheet" href="/styles/signin/styles.css">    
+                <link rel="stylesheet" href="/styles/signin/styles.css"> 
+                <link rel="stylesheet" href="/styles/signin/output.css">   
                 <script src="/scripts/script-signin.js" ></script>
             </head>
             <h1>SIGN IN TO GDG</h1>
-            <div class="container" id="container">
+            <div class="container right-panel-active" id="container" > 
+                <!-- //TODO: remove right-panel-active default class -->
                 <div class="form-container sign-up-container">
                     <form id="signupForm" method="POST">
                         <h1>Create Account</h1>
-                        <div class="social-container">
-                            <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-                            <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
-                            <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+                        <div class="pfp-wrapper">
+                            <input
+                                type="file" 
+                                class="pfp-input" 
+                                id="fileInput" onchange="pfp_check()"
+                                accept=".png, .jpg, .jpeg"
+                                >
                         </div>
-                        <span>or use your email for registration</span>
+                        <label for="fileInput" class="pfp-input-label">Choose an image, or drag it here
+                            <sub class=" flex justify-center">only .jpg/.jpeg/.png is accepted</sub>
+                        </label>
                         <input type="text" placeholder="Name" />
                         <input type="email" placeholder="Email" />
                         <input type="password" placeholder="Password" />
@@ -58,6 +64,7 @@ let signin = () =>
                 </div>
             </div>
             <script>
+
                 const form = document.getElementById('signupForm');
                 form.addEventListener('submit', async function (e) 
                 {
