@@ -1,3 +1,11 @@
+<<<<<<< HEAD
+run-docker:
+	@source ./server/.env && \
+		sudo docker run --rm \
+		gdg-email-service:latest \
+		-p ${PORT}  \
+		
+=======
 run-docker:
 	@source ./server/.env && \
 		sudo docker run --rm \
@@ -16,3 +24,4 @@ run-server:
 		-e ROOT_PASSWORD=${ROOT_PASSWORD} \
 		-e GCP_PROJECT_ID=${GCP_PROJECT_ID} \
 		devpiush/gdg-leaderboard-server:latest
+>>>>>>> 1bcc234c578f82fb7578181fb457d74e32a5fe49
