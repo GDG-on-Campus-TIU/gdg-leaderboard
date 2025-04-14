@@ -39,7 +39,8 @@ let signin = () =>
                                 <input type="password" name="password" placeholder="Password" />
                             </div> 
                             </div>
-                            <button onclick="handleSignup()">Sign Up</button>
+                            <!-- <button onclick="handleSignup()">Sign Up</button> -->
+                            <button type="submit">Sign Up</button>
                         </form>
                     </div>
                     <div class="form-container sign-in-container">
