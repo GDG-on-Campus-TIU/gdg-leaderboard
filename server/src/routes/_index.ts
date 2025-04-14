@@ -4,7 +4,7 @@ import { healthRouter } from "./health.route";
 import { adminRouter } from "./admin.router";
 import { uploadRouter } from "./upload.router";
 import { rootRouter } from "./root.router";
-import { Middlewares } from "../middlewares/authguard";
+import { Middlewares } from "../middlewares/_index";
 
 const mainRouter = new Hono();
 
