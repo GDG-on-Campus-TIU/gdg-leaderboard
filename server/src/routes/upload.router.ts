@@ -64,15 +64,16 @@ uploadRouter.post("/pfp", async (c) => {
     // @TODO transform the file name for url friendliness
     let fileName = (file as any).name || `uploaded-file-${Date.now()}`;
     let ext = fileName.split(".").pop() || "jpg"; // Get the file extension
-    fileName = fileName.replace(/\s+/g, "-"); // Replace spaces with dashes
-    fileName = fileName.replace(/[^a-zA-Z0-9.-]/g, "_"); // Replace special characters
-    fileName = fileName.replace(/--+/g, "-"); // Replace multiple dashes with a single dash
-    fileName = fileName.replace(/^-+|-+$/g, ""); // Remove leading/trailing dashes
-    fileName = fileName.replace(/_/g, "-"); // Replace underscores with dashes
-    fileName = fileName.toLowerCase(); // Convert to lowercase
+
+    // fileName = fileName.replace(/\s+/g, "-"); // Replace spaces with dashes
+    // fileName = fileName.replace(/[^a-zA-Z0-9.-]/g, "_"); // Replace special characters
+    // fileName = fileName.replace(/--+/g, "-"); // Replace multiple dashes with a single dash
+    // fileName = fileName.replace(/^-+|-+$/g, ""); // Remove leading/trailing dashes
+    // fileName = fileName.replace(/_/g, "-"); // Replace underscores with dashes
+    // fileName = fileName.toLowerCase(); // Convert to lowercase
 
     [fileName, ext] = fileName.split(".");
-    fileName = `${fileName}-${clgId}-${Date.now()}.${ext}`; // Append timestamp to avoid collisions
+    fileName = `pfp_${clgId}.${ext}`; // Append timestamp to avoid collisions
 
     log.info(`Transformed file name: ${fileName}`);
 
