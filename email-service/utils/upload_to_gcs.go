@@ -20,7 +20,13 @@ func UploadPFPToGCS(bucketName, imagePath string, isPfp bool) error {
 
 	ctx := context.Background()
 
-	client, err := storage.NewClient(ctx, option.WithCredentialsFile("credentials.json"))
+	var client *storage.Client
+	var err error
+	if os.Getenv("CLOUD_RUN_ENV") == "yes" {
+		client, err = storage.NewClient(ctx)
+	} else {
+		client, err = storage.NewClient(ctx, option.WithCredentialsFile("credentials.json"))
+	}
 	if err != nil {
 		return fmt.Errorf("failed to create client: %v", err)
 	}
