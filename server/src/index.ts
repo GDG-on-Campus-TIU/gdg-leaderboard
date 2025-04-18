@@ -33,13 +33,6 @@ app.use(
     log.http(msg, ...rest);
   })
 );
-// app.use(
-//   cors({
-//     origin: ["*", "localhost:3001", "gdgtiu.org"],
-//     allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-//     credentials: true,
-//   })
-// );
 app.use(
   cors({
     origin: (origin) => {
