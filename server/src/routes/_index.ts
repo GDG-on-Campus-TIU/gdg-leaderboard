@@ -5,6 +5,7 @@ import { adminRouter } from "./admin.router";
 import { uploadRouter } from "./upload.router";
 import { rootRouter } from "./root.router";
 import { Middlewares } from "../middlewares/_index";
+import { paymentRouter } from "./payment.router";
 
 const mainRouter = new Hono();
 
@@ -15,6 +16,7 @@ mainRouter.route("/auth", authRouter);
 mainRouter.route("/health", healthRouter);
 
 mainRouter.route("/upload", uploadRouter);
+mainRouter.route("/payment/upload", paymentRouter);
 
 // Protecting admin routes
 mainRouter.use("/admin/*", Middlewares.adminGuard);

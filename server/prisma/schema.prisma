@@ -1,15 +1,92 @@
-/**
- * Main schema file for db
- * models:
- * - Student
- * - Score
- * - Admin
- * @maintainer Piush Bose <dev.bosepiush@gmail.com>
- */
-
 generator client {
   provider = "prisma-client-js"
-  // output   = "../generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Pfp {
+  id        String   @id @default(uuid())
+  studentId String   @unique
+  url       String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  student   Student  @relation(fields: [studentId], references: [id])
+
+  @@index([studentId], map: "pfp_studentId_index")
+}
+
+model Student {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  role      Role     @default(STUDENT)
+  clgId     String   @unique
+  idCard    String   @unique
+  pfp       Pfp?
+  score     Score[]
+
+  @@index([clgId], map: "student_clgId_index")
+  @@index([email], map: "email_index")
+}
+
+model Score {
+  id                 String   @id @default(uuid())
+  studentId          String?
+  totalScore         Int
+  attendanceScore    Int
+  participationScore Int
+  assignmentScore    Int
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  domain             Domain
+  student            Student? @relation(fields: [studentId], references: [id])
+}
+
+model Admin {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  role      Role     @default(ADMIN)
+  empId     String   @unique @default(cuid())
+
+  @@index([empId], map: "admin_empId_index")
+  @@index([email], map: "admin_email_index")
+}
+
+model employee_updates {
+  id       String  @id
+  userid   String?
+  username String?
+  content  String?
+  date     String?
+}
+
+model MerchPayments {
+  id             String   @id @default(uuid())
+  orderId        String   @unique
+  name           String
+  email          String
+  upiId          String
+  phone          String
+  confirmationSS String
+  amount         Float
+  status         String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([upiId], name: "merch_payments_upiId_index")
+  @@index([phone], name: "merch_payments_phone_index")
+  @@index([orderId], name: "merch_payments_orderId_index")
+  @@index([confirmationSS], name: "merch_payments_confirmationSS_index")
 }
 
 enum Role {
@@ -27,64 +104,4 @@ enum Domain {
   IOT
   CYBERSECURITY
   DEVOPS
-}
-
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
-
-model Pfp {
-  id        String   @id @default(uuid())
-  studentId String   @unique
-  student   Student? @relation(fields: [studentId], references: [id])
-  url       String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([studentId], name: "pfp_studentId_index")
-}
-
-model Student {
-  id        String   @id @default(uuid())
-  name      String
-  clgId     String   @unique
-  idCard    String   @unique
-  email     String   @unique
-  password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  score     Score[]
-  role      Role     @default(STUDENT)
-  pfp       Pfp?
-
-  @@index([clgId], name: "student_clgId_index")
-  @@index([email], name: "email_index")
-}
-
-model Score {
-  id                 String   @id @default(uuid())
-  student            Student? @relation(fields: [studentId], references: [id])
-  studentId          String?
-  domain             Domain
-  totalScore         Int
-  attendanceScore    Int
-  participationScore Int
-  assignmentScore    Int
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
-}
-
-model Admin {
-  id        String   @id @default(uuid())
-  name      String
-  empId     String   @unique @default(cuid())
-  email     String   @unique
-  password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  role      Role     @default(ADMIN)
-
-  @@index([empId], name: "admin_empId_index")
-  @@index([email], name: "admin_email_index")
 }
