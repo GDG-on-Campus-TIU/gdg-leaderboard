@@ -1,7 +1,7 @@
 package models
 
 type ReceiptDTO struct {
-	StudentId      string  `json:"studentId" binding:"required"`
+	StudentId      int64   `json:"studentId" binding:"required"`
 	OrderId        string  `json:"orderId" binding:"required"`
 	Name           string  `json:"name" binding:"required"`
 	Phone          string  `json:"phone" binding:"required"`
