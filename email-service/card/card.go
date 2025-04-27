@@ -83,7 +83,7 @@ func GenerateIDCard(student models.Student) (string, error) {
 // GenerateReceiptImage generates a receipt image for the given receipt DTO,
 // saves it to output/receipt_{OrderId}.png, and uploads it to GCS.
 func GenerateReceiptImage(receipt models.ReceiptDTO) (string, error) {
-	templatePath := filepath.Join("assets", "receipt_template.png")
+	templatePath := filepath.Join("assets", "receipt_temp.png")
 	img, err := gg.LoadImage(templatePath)
 	if err != nil {
 		return "", fmt.Errorf("failed to load receipt template: %w", err)
