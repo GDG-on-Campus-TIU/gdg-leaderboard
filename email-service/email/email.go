@@ -75,10 +75,10 @@ func SendEmailWithReceipt(receipt models.ReceiptDTO) error {
 	m.SetHeader("Subject", "Your Purchase Receipt")
 	m.SetBody("text/html", body.String())
 
-	receiptImgPath, err := card.GenerateReceiptImage(receipt)
-	if err != nil {
-		m.Attach(receiptImgPath)
-	}
+	// receiptImgPath, err := card.GenerateReceiptImage(receipt)
+	// if err != nil {
+	// 	m.Attach(receiptImgPath)
+	// }
 
 	d := gomail.NewDialer(cfg.SMTPServer, cfg.SMTPPort, cfg.SenderEmail, cfg.AppPassword)
 
