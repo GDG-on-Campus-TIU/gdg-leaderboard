@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link
+      rel="shortcut icon"
+      href="https://storage.googleapis.com/leaderboard-pfp/favicon/favicon.ico"
+      type="image/x-icon"
+    />
+    <title>Welcome to GDG On Campus TIU</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        background-color: #f7f7f7;
+        margin: 0;
+        padding: 20px;
+      }
+      .container {
+        background: #fff;
+        max-width: 600px;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        overflow: hidden;
+      }
+
+      .hero__banner {
+        width: 100%;
+        height: auto;
+        border-radius: 4px;
+      }
+
+      .footer__banner {
+        width: 60%;
+        margin-inline: auto;
+        height: auto;
+        border-radius: 4px;
+      }
+
+      h2 {
+        color: #333;
+      }
+      p {
+        margin: 15px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <img
+        class="hero__banner"
+        src="https://storage.googleapis.com/leaderboard-pfp/email_top_banner.jpg"
+        alt="Banner"
+      />
+      <h2 style="color: blue">👋 Hello {{ .Name }},</h2>
+      <p>Thanks for purchasing the limited time merch from us!!</p>
+      <p>Here is your receipt details we received from our end.</p>
+      <p>
+        <strong>Name:</strong> {{ .Name }}<br />
+        <strong>Phone number:</strong> {{ .Phone }}<br />
+        <strong>Email:</strong> {{ .Email }}<br />
+        <strong>Confirmation:</strong> {{ .ConfirmationSS }}<br />
+        <strong>Status:</strong> {{ .Status }}<br />
+        <strong>Student ID:</strong> {{ .StudentId }}<br />
+        <strong>Order ID:</strong> {{ .OrderId }}<br />
+        <strong>Amount:</strong> {{ .Amount }}<br />
+        <strong>Items:</strong> {{ .Items }}<br />
+      </p>
+      <p>Find the receipt attached to this email.</p>
+      <p style="color: red">
+        Make sure to keep this receipt safe for your records. If you have any
+        questions or concerns, please feel free to reach out to us at
+        <a href="mailto:dev.bosepiush@gmail.com">dev.bosepiush@gmail.com</a>.
+      </p>
+      <p>Thank you,<br /><strong>GDG On Campus TIU</strong></p>
+      <hr />
+      <footer>
+        <p style="font-size: 12px; color: #777">
+          This email was sent to {{ .Email }} because you made a purchase from
+          GDG On Campus TIU. If you no longer wish to receive these emails, you
+          can unsubscribe at any time.
+          <br />
+          &copy; 2025 GDG On Campus TIU. All rights reserved.
+        </p>
+        <div style="width: 100%; display: grid; place-items: center">
+          <img
+            class="footer__banner"
+            src="https://storage.googleapis.com/leaderboard-pfp/email_footer_banner.png"
+            alt="footer__banner"
+          />
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

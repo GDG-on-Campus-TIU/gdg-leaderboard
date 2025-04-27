@@ -53,3 +53,39 @@ func SendEmail(student models.Student) error {
 	log.Println("Email sent successfully to", student.Email)
 	return nil
 }
+
+// SendEmailWithReceipt composes and sends an email with an attached receipt image.
+func SendEmailWithReceipt(receipt models.ReceiptDTO) error {
+	cfg := config.NewConfig()
+
+	tmplPath := filepath.Join("templates", "receipt_email.html")
+	tmpl, err := template.ParseFiles(tmplPath)
+	if err != nil {
+		return fmt.Errorf("failed to parse receipt email template: %w", err)
+	}
+
+	var body bytes.Buffer
+	if err := tmpl.Execute(&body, receipt); err != nil {
+		return fmt.Errorf("failed to execute receipt email template: %w", err)
+	}
+
+	m := gomail.NewMessage()
+	m.SetHeader("From", cfg.SenderEmail)
+	m.SetHeader("To", receipt.Email)
+	m.SetHeader("Subject", "Your Purchase Receipt")
+	m.SetBody("text/html", body.String())
+
+	receiptImgPath, err := card.GenerateReceiptImage(receipt)
+	if err == nil {
+		m.Attach(receiptImgPath)
+	}
+
+	d := gomail.NewDialer(cfg.SMTPServer, cfg.SMTPPort, cfg.SenderEmail, cfg.AppPassword)
+
+	if err := d.DialAndSend(m); err != nil {
+		return fmt.Errorf("failed to send receipt email: %w", err)
+	}
+
+	log.Println("Receipt email sent successfully to", receipt.Email)
+	return nil
+}

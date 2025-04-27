@@ -41,7 +41,8 @@ paymentRouter.post("/", async (c: Context) => {
 
       fileName = `${name
         .toString()
-        .replace(/\s+/g, "-")}_${email.toString()}_ss.${ext}`;
+        .toLowerCase()
+        .replace(/\s+/g, "-")}_${requestId.toString()}_ss.${ext}`;
 
       const buffer = Buffer.from(await file.arrayBuffer());
 

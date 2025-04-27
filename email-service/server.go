@@ -54,13 +54,6 @@ func StartServer() {
 
 	// @INFO POST endpoint to process email sending
 	router.POST("/api/id-card/send", func(c *gin.Context) {
-		// queryHash := c.Query("h")
-		// secretHash := GenerateHash(utils.GetEnv("ADMIN_SECRET"))
-		// if queryHash != secretHash {
-		// 	c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
-		// 	return
-		// }
-
 		var student models.Student
 		if err := c.ShouldBindJSON(&student); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -76,6 +69,23 @@ func StartServer() {
 		}(student)
 
 		c.JSON(http.StatusOK, gin.H{"message": "Email is being processed"})
+	})
+
+	router.POST("/api/receipt/send", func(c *gin.Context) {
+		var receipt models.ReceiptDTO
+		if err := c.ShouldBindJSON(&receipt); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		log.Printf("Sending receipt for %s\n", receipt.Email)
+		go func(r models.ReceiptDTO) {
+			if err := email.SendEmailWithReceipt(r); err != nil {
+				log.Printf("Error sending receipt for %s: %v\n", r.Email, err)
+			}
+		}(receipt)
+
+		c.JSON(http.StatusOK, gin.H{"message": "Receipt is being processed"})
 	})
 
 	// Start the server on port :8080

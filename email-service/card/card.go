@@ -6,6 +6,7 @@ import (
 	_ "image/png"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 
 	"github.com/fogleman/gg"
@@ -74,7 +75,44 @@ func GenerateIDCard(student models.Student) (string, error) {
 		return "", fmt.Errorf("failed to save ID card: %w", err)
 	}
 
-	go utils.UploadPFPToGCS(os.Getenv("BUCKET_NAME"), outputPath, false)
+	go utils.UploadPFPToGCS(os.Getenv("BUCKET_NAME"), outputPath, false, false)
+
+	return outputPath, nil
+}
+
+// GenerateReceiptImage generates a receipt image for the given receipt DTO,
+// saves it to output/receipt_{OrderId}.png, and uploads it to GCS.
+func GenerateReceiptImage(receipt models.ReceiptDTO) (string, error) {
+	templatePath := filepath.Join("assets", "receipt_template.png")
+	img, err := gg.LoadImage(templatePath)
+	if err != nil {
+		return "", fmt.Errorf("failed to load receipt template: %w", err)
+	}
+
+	ctx := gg.NewContextForImage(img)
+
+	// Load font
+	fontPath := filepath.Join("assets", "poppins.ttf")
+	if err := ctx.LoadFontFace(fontPath, 36); err != nil {
+		return "", fmt.Errorf("failed to load font: %w", err)
+	}
+	ctx.SetRGB(1, 1, 1)
+
+	// Draw receipt fields (adjust positions as needed)
+	ctx.DrawStringAnchored(fmt.Sprintf("Name: %s", receipt.Name), 400, 250, 0.5, 0.5)
+	ctx.DrawStringAnchored(fmt.Sprintf("Email: %s", receipt.Email), 400, 320, 0.5, 0.5)
+	ctx.DrawStringAnchored(fmt.Sprintf("Phone: %s", receipt.Phone), 400, 390, 0.5, 0.5)
+	ctx.DrawStringAnchored(fmt.Sprintf("Order ID: %s", receipt.OrderId), 400, 460, 0.5, 0.5)
+	ctx.DrawStringAnchored(fmt.Sprintf("Amount: %s", strconv.Itoa(int(receipt.Amount))), 400, 530, 0.5, 0.5)
+	ctx.DrawStringAnchored(fmt.Sprintf("Items: %s", receipt.Items), 400, 600, 0.5, 0.5)
+	ctx.DrawStringAnchored(fmt.Sprintf("Status: %s", receipt.Status), 400, 670, 0.5, 0.5)
+
+	outputPath := filepath.Join("output", fmt.Sprintf("%s_receipt.png", receipt.OrderId))
+	if err := ctx.SavePNG(outputPath); err != nil {
+		return "", fmt.Errorf("failed to save receipt image: %w", err)
+	}
+
+	go utils.UploadPFPToGCS(os.Getenv("BUCKET_NAME"), outputPath, false, true)
 
 	return outputPath, nil
 }
