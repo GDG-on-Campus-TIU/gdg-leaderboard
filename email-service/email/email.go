@@ -76,7 +76,7 @@ func SendEmailWithReceipt(receipt models.ReceiptDTO) error {
 	m.SetBody("text/html", body.String())
 
 	receiptImgPath, err := card.GenerateReceiptImage(receipt)
-	if err == nil {
+	if err != nil {
 		m.Attach(receiptImgPath)
 	}
 
