@@ -201,6 +201,13 @@ function App() {
               <div className="mt-1 text-gray-400 text-xs">
                 Created: {new Date(item.createdAt).toLocaleString()}
               </div>
+              <div className="mt-1">
+                <img
+                  src={item.confirmationSS}
+                  alt="Confirmation Screenshot"
+                  className="w-full"
+                />
+              </div>
             </div>
           ))}
         </div>
