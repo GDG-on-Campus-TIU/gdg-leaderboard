@@ -31,6 +31,7 @@ type PaymentResult = {
   status: string;
   createdAt: string;
   updatedAt: string;
+  specialName: string;
 };
 
 function App() {
