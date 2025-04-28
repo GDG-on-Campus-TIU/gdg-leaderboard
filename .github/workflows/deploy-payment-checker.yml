@@ -21,21 +21,26 @@ jobs:
         with:
           node-version: "20"
 
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: "latest"
+
       - name: Install dependencies
         run: |
           cd payment_finder
-          npm install
+          bun install
 
       - name: Run linting
         run: |
           cd payment_finder
-          npm run lint
+          bun run lint
         continue-on-error: false
 
       - name: Build the project
         run: |
           cd payment_finder
-          npm run build
+          bun run build
 
       - name: Deploy to server
         env:
