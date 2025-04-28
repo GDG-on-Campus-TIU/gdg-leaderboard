@@ -22,7 +22,7 @@ if (process.env.CLOUD_RUN_ENV === "yes") {
 
 const bucket = storage.bucket("leaderboard-pfp");
 
-paymentRouter.post("/", async (c: Context) => {
+paymentRouter.post("/upload", async (c: Context) => {
   const body = await c.req.parseBody();
   const { ss, name, phone, email, upiId, products, totalAmount } = body;
 
@@ -119,6 +119,37 @@ paymentRouter.post("/", async (c: Context) => {
     log.error(error);
     return c.text("Error uploading file", 500);
   }
+});
+
+paymentRouter.get("/find", async (c: Context) => {
+  const body = await c.req.parseBody();
+  const { orderId, name, email, upiId, phone } = body;
+
+  if (!orderId && !name && !email && !upiId && !phone) {
+    return c.text("Missing required fields", 400);
+  }
+
+  const payment = await prisma.merchPayments.findFirst({
+    where: {
+      OR: [
+        { orderId: orderId as string },
+        { email: { contains: email as string, mode: "insensitive" } },
+        { upiId: { contains: upiId as string, mode: "insensitive" } },
+        { name: { contains: name as string, mode: "insensitive" } },
+        { phone: { contains: phone as string, mode: "insensitive" } },
+      ],
+    },
+  });
+
+  if (!payment) {
+    return c.text("Payment not found", 404);
+  }
+
+  return c.json({
+    message: "Payment found",
+    status: 200,
+    data: payment,
+  });
 });
 
 export { paymentRouter };

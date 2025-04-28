@@ -16,7 +16,7 @@ mainRouter.route("/auth", authRouter);
 mainRouter.route("/health", healthRouter);
 
 mainRouter.route("/upload", uploadRouter);
-mainRouter.route("/payment/upload", paymentRouter);
+mainRouter.route("/payment", paymentRouter);
 
 // Protecting admin routes
 mainRouter.use("/admin/*", Middlewares.adminGuard);
