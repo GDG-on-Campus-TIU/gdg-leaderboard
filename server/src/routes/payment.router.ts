@@ -30,6 +30,16 @@ paymentRouter.post("/", async (c: Context) => {
     return c.text("Missing required fields", 400);
   }
 
+  const items = products.toString().split(",");
+  const productsList = items.map((i: string) => {
+    const [name, size, quantity] = i.split(":");
+    return {
+      name: name.trim(),
+      size: size.trim(),
+      quantity: Number(quantity.trim()),
+    };
+  });
+
   try {
     if (ss instanceof Blob || (ss as any).arrayBuffer) {
       const file = ss as Blob;
@@ -89,6 +99,7 @@ paymentRouter.post("/", async (c: Context) => {
             upiId: upiId as string,
             confirmationSS: publicUrl,
             amount: Number(totalAmount),
+            items,
             orderId: requestId,
             status: "CONFIRMED",
           },

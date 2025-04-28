@@ -78,7 +78,7 @@ model MerchPayments {
   upiId          String
   phone          String
   confirmationSS String
-  size           String
+  items          String[]
   amount         Float
   status         String
   createdAt      DateTime @default(now())
