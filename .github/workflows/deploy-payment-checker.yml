@@ -1,0 +1,54 @@
+name: Deploy Payment Checker
+
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: |
+          cd payment_finder
+          npm install
+
+      - name: Run linting
+        run: |
+          cd payment_finder
+          npm run lint
+        continue-on-error: false
+
+      - name: Build the project
+        run: |
+          cd payment_finder
+          npm run build
+
+      - name: Deploy to server
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_KEY }}
+          SSH_HOST: gdgtiu.org
+          SSH_USER: piush
+          REMOTE_PATH: /var/www/payment
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+          ssh $SSH_USER@$SSH_HOST "sudo rm -rf $REMOTE_PATH || true && sudo mkdir -p $REMOTE_PATH && sudo chown $SSH_USER:$SSH_USER $REMOTE_PATH"
+          rsync -avz --delete payment-checker/dist/ $SSH_USER@$SSH_HOST:$REMOTE_PATH/
+          ssh $SSH_USER@$SSH_HOST "sudo chown -R root:root $REMOTE_PATH"
+          rm -rf ~/.ssh/id_rsa
