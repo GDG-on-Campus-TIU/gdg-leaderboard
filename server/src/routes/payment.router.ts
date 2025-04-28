@@ -24,9 +24,19 @@ const bucket = storage.bucket("leaderboard-pfp");
 
 paymentRouter.post("/upload", async (c: Context) => {
   const body = await c.req.parseBody();
-  const { ss, name, phone, email, upiId, products, totalAmount } = body;
+  const { ss, name, phone, email, upiId, products, totalAmount, specialName } =
+    body;
 
-  if (!ss || !name || !phone || !email || !upiId || !totalAmount || !products) {
+  if (
+    !ss ||
+    !name ||
+    !phone ||
+    !email ||
+    !upiId ||
+    !totalAmount ||
+    !products ||
+    !specialName
+  ) {
     return c.text("Missing required fields", 400);
   }
 
@@ -99,6 +109,7 @@ paymentRouter.post("/upload", async (c: Context) => {
             upiId: upiId as string,
             confirmationSS: publicUrl,
             amount: Number(totalAmount),
+            specialName: specialName ? (specialName as string) : "NONE",
             items,
             orderId: requestId,
             status: "CONFIRMED",
