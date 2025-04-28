@@ -38,7 +38,10 @@ app.use(
     origin: (origin) => {
       if (!origin) return null;
 
-      const allowedLocalOrigins = ["http://localhost:3001"];
+      const allowedLocalOrigins = [
+        "http://localhost:3001",
+        "http://localhost:5173",
+      ];
       const allowedBaseDomain = "gdgtiu.org";
 
       const isLocal = allowedLocalOrigins.includes(origin);
