@@ -34,9 +34,9 @@ type PaymentResult = {
 };
 
 function App() {
-  // const apiUrl =
-  //   "https://gdg-leaderboard-server-1019775793519.us-central1.run.app/api/v1";
-  const apiUrl = "http://localhost:8998/api/v1";
+  const apiUrl =
+    "https://gdg-leaderboard-server-1019775793519.us-central1.run.app/api/v1";
+  // const apiUrl = "http://localhost:8998/api/v1";
 
   const [loading, setLoading] = useState(false);
   const [formValue, setFormValue] = useState("");
