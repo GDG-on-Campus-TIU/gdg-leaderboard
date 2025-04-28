@@ -1,4 +1,4 @@
-import { LucideSearch } from "lucide-react";
+import { ArrowDown, LucideSearch } from "lucide-react";
 import { Button } from "./components/ui/button";
 import { Input } from "./components/ui/input";
 import {
@@ -44,6 +44,7 @@ function App() {
   const [error, setError] = useState("");
   const [results, setResults] = useState<PaymentResult[]>([]);
   const [success, setSuccess] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const selectedLabel =
     QUERY_TYPES.find((t) => t.value === type)?.label ?? "Type";
@@ -95,12 +96,17 @@ function App() {
           onChange={(e) => setFormValue(e.target.value)}
           className="flex-1 min-w-0"
         />
-        <DropdownMenu>
+        <DropdownMenu onOpenChange={setOpen} open={open}>
           <DropdownMenuTrigger asChild>
             <Button
               variant={"outline"}
-              className="w-full sm:w-auto min-w-[110px]"
+              className="w-full sm:w-auto min-w-[110px] select-none"
             >
+              <ArrowDown
+                className={
+                  open ? "rotate-180 transition-all" : "transition-all"
+                }
+              />
               {selectedLabel}
             </Button>
           </DropdownMenuTrigger>
