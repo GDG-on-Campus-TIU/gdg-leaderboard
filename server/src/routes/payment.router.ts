@@ -122,14 +122,18 @@ paymentRouter.post("/upload", async (c: Context) => {
 });
 
 paymentRouter.get("/find", async (c: Context) => {
-  const body = await c.req.parseBody();
-  const { orderId, name, email, upiId, phone } = body;
+  const query = c.req.query();
+  const { orderId, name, email, upiId, phone } = query;
 
+  // At least one of the fields must be provided
   if (!orderId && !name && !email && !upiId && !phone) {
-    return c.text("Missing required fields", 400);
+    return c.text(
+      "At least one of orderId, name, email, upiId, or phone is required",
+      400
+    );
   }
 
-  const payment = await prisma.merchPayments.findFirst({
+  const payment = await prisma.merchPayments.findMany({
     where: {
       OR: [
         { orderId: orderId as string },
@@ -141,7 +145,7 @@ paymentRouter.get("/find", async (c: Context) => {
     },
   });
 
-  if (!payment) {
+  if (!payment || payment.length === 0) {
     return c.text("Payment not found", 404);
   }
 
