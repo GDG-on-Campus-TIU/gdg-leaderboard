@@ -18,7 +18,7 @@ import { PaymentResult } from "./Search";
 
 function AllTransactions() {
   const apiUrl =
-    "https://gdg-leaderboard-1011506502548.asia-south1.run.app/api/v1";
+    "https://gdg-leaderboard-1011506502548.asia-south1.run.app/api/v1/payment/all";
   // const apiUrl = "http://localhost:8998/api/v1";
 
   const [loading, setLoading] = useState(true);
@@ -28,12 +28,12 @@ function AllTransactions() {
   const [hasMore, setHasMore] = useState(true);
   const pageSize = 20;
 
-  const fetchTransactions = () => async () => {
+  const fetchTransactions = async () => {
     setLoading(true);
     setError("");
 
     try {
-      const res = await axios.get(`${apiUrl}/payment/all`, {
+      const res = await axios.get(apiUrl, {
         params: {
           t: pageSize,
           c: page * pageSize,
@@ -95,6 +95,7 @@ function AllTransactions() {
               <TableHead>Name</TableHead>
               <TableHead>Email</TableHead>
               <TableHead>Phone</TableHead>
+              <TableHead>Special Name</TableHead>
               <TableHead>Status</TableHead>
               <TableHead className="text-right">Amount</TableHead>
               <TableHead className="text-center">Actions</TableHead>
@@ -107,6 +108,7 @@ function AllTransactions() {
                 <TableCell>{transaction.name}</TableCell>
                 <TableCell>{transaction.email}</TableCell>
                 <TableCell>{transaction.phone}</TableCell>
+                <TableCell>{transaction.specialName ?? "NA"}</TableCell>
                 <TableCell>
                   <span
                     className={`px-2 py-1 rounded-full text-xs ${
