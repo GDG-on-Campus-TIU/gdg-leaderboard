@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { Eye } from "lucide-react";
@@ -28,7 +28,7 @@ function AllTransactions() {
   const [hasMore, setHasMore] = useState(true);
   const pageSize = 20;
 
-  const fetchTransactions = useCallback(async () => async () => {
+  const fetchTransactions = () => async () => {
     setLoading(true);
     setError("");
 
@@ -57,11 +57,11 @@ function AllTransactions() {
     } finally {
       setLoading(false);
     }
-  }, [page])
+  };
 
   useEffect(() => {
     fetchTransactions();
-  }, [page, fetchTransactions]);
+  }, [page]);
 
   const loadMore = () => {
     setPage(prevPage => prevPage + 1);
