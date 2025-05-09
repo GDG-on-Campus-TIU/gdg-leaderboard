@@ -88,7 +88,7 @@ function AllTransactions() {
 
       <div className="bg-white shadow-md rounded-lg w-full max-w-5xl overflow-hidden">
         <Table>
-          <TableCaption>A list of all transactions.</TableCaption>
+          <TableCaption className="mb-4">All Transactions</TableCaption>
           <TableHeader>
             <TableRow>
               <TableHead>Order ID</TableHead>
@@ -97,8 +97,8 @@ function AllTransactions() {
               <TableHead>Phone</TableHead>
               <TableHead>Special Name</TableHead>
               <TableHead>Status</TableHead>
-              <TableHead className="text-right">Amount</TableHead>
               <TableHead className="text-center">Actions</TableHead>
+              <TableHead className="text-right">Amount</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -120,7 +120,6 @@ function AllTransactions() {
                     {transaction.status}
                   </span>
                 </TableCell>
-                <TableCell className="text-right">₹{transaction.amount}</TableCell>
                 <TableCell className="text-center">
                   <Button variant="ghost" size="sm" asChild>
                     <a
@@ -134,14 +133,14 @@ function AllTransactions() {
                     </a>
                   </Button>
                 </TableCell>
+                <TableCell className="text-right">₹{transaction.amount}</TableCell>
               </TableRow>
             ))}
           </TableBody>
           <TableFooter>
-            <TableRow>
-              <TableCell colSpan={5}>Total Amount</TableCell>
+            <TableRow className="bg-background text-foreground">
+              <TableCell colSpan={7}>Total Amount</TableCell>
               <TableCell className="text-right">₹{totalAmount.toFixed(2)}</TableCell>
-              <TableCell></TableCell>
             </TableRow>
           </TableFooter>
         </Table>
