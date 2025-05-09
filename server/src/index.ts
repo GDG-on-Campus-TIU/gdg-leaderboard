@@ -41,6 +41,11 @@ app.use(
       const allowedLocalOrigins = [
         "http://localhost:3001",
         "http://localhost:5173",
+        "https://merch.gdgtiu.dev",
+        "https://leaderboard.gdgtiu.dev",
+        "https://gdgtiu.dev",
+        "https://www.gdgtiu.dev",
+        "https://devx.gdgtiu.dev",
       ];
       const allowedBaseDomain = "gdgtiu.dev";
 
