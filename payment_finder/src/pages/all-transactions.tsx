@@ -14,7 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { PaymentResult } from "./Search";
+import { PaymentResult } from "./search";
 
 function AllTransactions() {
   const apiUrl =
@@ -123,15 +123,33 @@ function AllTransactions() {
                 <TableCell>{transaction.name}</TableCell>
                 <TableCell>{transaction.email}</TableCell>
                 <TableCell>{transaction.phone}</TableCell>
-                <TableCell>{transaction.specialName ?? "NA"}</TableCell>
+                <TableCell>{transaction.specialName}</TableCell>
                 <TableCell colSpan={10}>
-                  {transaction.items.map((item) => (
-                    <p>
-                      {`${item.split(":")[0]} (${item.split(":")[2]}pcs) - ${
-                        item.split(":")[1]
-                      }`}
-                    </p>
-                  ))}
+                  {transaction.items.map((item) => {
+                    const itemParts = item.split(":");
+                    const itemName = itemParts[0];
+                    const itemSize = itemParts[1];
+                    const itemCount = itemParts[2];
+
+                    // Check if it contains "Custom Name" or similar patterns
+                    const hasCustomName =
+                      itemName.toLowerCase().includes("custom name") ||
+                      (itemName.toLowerCase().includes("with") &&
+                        itemName.toLowerCase().includes("name"));
+
+                    return (
+                      <p
+                        className={`${
+                          hasCustomName
+                            ? "text-yellow-600 font-medium bg-yellow-50 px-2 py-1 rounded border-l-2 border-yellow-400"
+                            : ""
+                        }`}
+                        key={item}
+                      >
+                        {`${itemName} (${itemCount}pcs) - ${itemSize}`}
+                      </p>
+                    );
+                  })}
                 </TableCell>
                 <TableCell>
                   <span

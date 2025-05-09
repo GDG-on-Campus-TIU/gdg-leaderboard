@@ -1,10 +1,14 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import Search from "./pages/Search";
-import AllTransactions from "./pages/AllTransactions";
+import {
+  BrowserRouter as Router,
+  Navigate,
+  Route,
+  Routes,
+} from "react-router-dom";
+import Search from "./pages/search";
+import AllTransactions from "./pages/all-transactions";
 import { ThemeProvider } from "./components/theme";
 
 function App() {
-
   return (
     <ThemeProvider defaultTheme="light">
       <Router>
