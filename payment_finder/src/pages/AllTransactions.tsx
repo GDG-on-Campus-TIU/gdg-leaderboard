@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { Eye } from "lucide-react";
@@ -41,7 +41,7 @@ function AllTransactions() {
       });
 
       const data = res.data.data || [];
-      setTransactions(prev => [...prev, ...data]);
+      setTransactions((prev) => [...prev, ...data]);
       setHasMore(data.length === pageSize);
     } catch (err) {
       let msg = "Error fetching transactions";
@@ -64,10 +64,13 @@ function AllTransactions() {
   }, [page]);
 
   const loadMore = () => {
-    setPage(prevPage => prevPage + 1);
+    setPage((prevPage) => prevPage + 1);
   };
 
-  const totalAmount = transactions.reduce((sum, transaction) => sum + transaction.amount, 0);
+  const totalAmount = transactions.reduce(
+    (sum, transaction) => sum + transaction.amount,
+    0,
+  );
 
   return (
     <main className="flex flex-col justify-start items-center gap-6 bg-gray-50 p-4 sm:p-8 min-h-screen">
@@ -114,15 +117,19 @@ function AllTransactions() {
           <TableBody>
             {transactions.map((transaction) => (
               <TableRow key={transaction.id}>
-                <TableCell className="font-medium">{transaction.orderId}</TableCell>
+                <TableCell className="font-medium">
+                  {transaction.orderId}
+                </TableCell>
                 <TableCell>{transaction.name}</TableCell>
                 <TableCell>{transaction.email}</TableCell>
                 <TableCell>{transaction.phone}</TableCell>
                 <TableCell>{transaction.specialName ?? "NA"}</TableCell>
                 <TableCell colSpan={10}>
-                  {transaction.items.map((item, index) => (
+                  {transaction.items.map((item) => (
                     <p>
-                    {`${item.split(":")[0]} (${item.split(":")[2]}pcs) - ${item.split(":")[1]}`}
+                      {`${item.split(":")[0]} (${item.split(":")[2]}pcs) - ${
+                        item.split(":")[1]
+                      }`}
                     </p>
                   ))}
                 </TableCell>
@@ -150,14 +157,18 @@ function AllTransactions() {
                     </a>
                   </Button>
                 </TableCell>
-                <TableCell className="text-right">₹{transaction.amount}</TableCell>
+                <TableCell className="text-right">
+                  ₹{transaction.amount}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
           <TableFooter>
             <TableRow>
               <TableCell colSpan={17}>Total Amount</TableCell>
-              <TableCell className="text-right">₹{totalAmount.toFixed(2)}</TableCell>
+              <TableCell className="text-right">
+                ₹{totalAmount.toFixed(2)}
+              </TableCell>
             </TableRow>
           </TableFooter>
         </Table>
@@ -169,9 +180,12 @@ function AllTransactions() {
           disabled={loading}
           className="mt-4"
         >
-          {loading ? (
-            <span className="mr-2 border-2 border-white border-t-transparent rounded-full w-4 h-4 animate-spin"></span>
-          ) : null}
+          {loading
+            ? (
+              <span className="mr-2 border-2 border-white border-t-transparent rounded-full w-4 h-4 animate-spin">
+              </span>
+            )
+            : null}
           Load More Transactions
         </Button>
       )}
