@@ -45,7 +45,7 @@ jobs:
       - name: Deploy to server
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_KEY }}
-          SSH_HOST: gdgtiu.org
+          SSH_HOST: gdgtiu.dev
           SSH_USER: piush
           REMOTE_PATH: /var/www/payment
         run: |
