@@ -1,4 +1,4 @@
-import { Hono, Context } from "hono";
+import { Context, Hono } from "hono";
 import { sign, verify } from "hono/jwt";
 import { prisma } from "../db/prisma";
 import { Utils } from "../utils/hash";
@@ -21,7 +21,7 @@ authRouter.post("/login", async (c: Context) => {
         {
           message: "Already logged in!",
         },
-        201
+        201,
       );
     }
 
@@ -35,7 +35,7 @@ authRouter.post("/login", async (c: Context) => {
         {
           message: "Missing required field, email and password must be sent!",
         },
-        400
+        400,
       );
     }
 
@@ -50,7 +50,7 @@ authRouter.post("/login", async (c: Context) => {
         {
           message: "User not found!",
         },
-        404
+        404,
       );
     }
 
@@ -60,7 +60,7 @@ authRouter.post("/login", async (c: Context) => {
         {
           message: "Invalid credentials!",
         },
-        401
+        401,
       );
     }
 
@@ -75,7 +75,7 @@ authRouter.post("/login", async (c: Context) => {
         iat: Math.floor(Date.now() / 1000), // Issued at
       },
       JWT_SECRET,
-      "HS512"
+      "HS512",
     );
 
     return c.json(
@@ -83,7 +83,7 @@ authRouter.post("/login", async (c: Context) => {
         message: "Login successful!",
         token,
       },
-      200
+      200,
     );
   } catch (error) {
     log.error(`Login error: ${error}`);
@@ -92,7 +92,7 @@ authRouter.post("/login", async (c: Context) => {
         message: "Error during login process",
         error: error instanceof Error ? error.message : String(error),
       },
-      500
+      500,
     );
   }
 });
@@ -113,7 +113,7 @@ authRouter.post("/signup", async (c: Context) => {
           message:
             "Missing required field, `name`, `email`, `clgId` and `password` must be sent!",
         },
-        400
+        400,
       );
     }
 
@@ -128,7 +128,7 @@ authRouter.post("/signup", async (c: Context) => {
         {
           message: "User already exists!",
         },
-        409
+        409,
       );
     }
 
@@ -140,7 +140,8 @@ authRouter.post("/signup", async (c: Context) => {
         name,
         email,
         clgId,
-        idCard: `https://storage.googleapis.com/leaderboard-pfp/id_card/${clgId}_id_card.png`,
+        idCard:
+          `https://storage.googleapis.com/gdgoctiu-bucket/id_card/${clgId}_id_card.png`,
         password: hashedPassword,
       },
     });
@@ -165,7 +166,7 @@ authRouter.post("/signup", async (c: Context) => {
         iat: Math.floor(Date.now() / 1000), // Issued at
       },
       JWT_SECRET,
-      "HS512"
+      "HS512",
     );
 
     return c.json(
@@ -174,7 +175,7 @@ authRouter.post("/signup", async (c: Context) => {
         user: studentWithScore,
         token,
       },
-      201
+      201,
     );
   } catch (error) {
     log.error(`Signup error: ${error}`);
@@ -183,7 +184,7 @@ authRouter.post("/signup", async (c: Context) => {
         message: "Error during signup process",
         error: error instanceof Error ? error.message : String(error),
       },
-      500
+      500,
     );
   }
 });
@@ -213,7 +214,7 @@ authRouter.get("/me", async (c: Context) => {
     decodedToken = (await verify(
       token,
       JWT_SECRET,
-      "HS512"
+      "HS512",
     )) as CustomJWTPayload;
     if (!decodedToken) {
       return c.text("Invalid token format", 401);

@@ -19,7 +19,7 @@ if (process.env.CLOUD_RUN_ENV === "yes") {
   });
 }
 
-const bucket = storage.bucket("leaderboard-pfp");
+const bucket = storage.bucket(process.env.GCS_BUCKET_NAME || "gdgoctiu-bucket");
 
 uploadRouter.post("/pfp", async (c) => {
   const body = await c.req.parseBody();
@@ -51,7 +51,7 @@ uploadRouter.post("/pfp", async (c) => {
         message: "File upload skipped, previous pfp exists",
         url: existingPfp.url,
       },
-      200
+      200,
     );
   }
 
@@ -97,7 +97,8 @@ uploadRouter.post("/pfp", async (c) => {
     });
 
     blobStream.on("finish", async () => {
-      const publicUrl = `https://storage.googleapis.com/${bucket.name}/pfp/${fileName}`;
+      const publicUrl =
+        `https://storage.googleapis.com/${bucket.name}/pfp/${fileName}`;
       return c.json({
         url: publicUrl,
         storageUrl: blob.cloudStorageURI,
@@ -138,7 +139,7 @@ uploadRouter.post("/pfp", async (c) => {
         url: `https://storage.googleapis.com/${bucket.name}/pfp/${fileName}`,
         details: uploadedFile,
       },
-      200
+      200,
     );
   } else {
     return c.text("Invalid file format", 400);

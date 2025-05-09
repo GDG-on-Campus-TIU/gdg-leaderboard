@@ -41,14 +41,14 @@ async function testConnection() {
     });
 
     // Try to access the specific bucket
-    const bucket = storage.bucket("leaderboard-pfp");
+    const bucket = storage.bucket(process.env.GCS_BUCKET_NAME || "gdgoctiu-bucket");
     const [exists] = await bucket.exists();
 
     if (exists) {
-      console.log('✅ Successfully connected to "leaderboard-pfp" bucket');
+      console.log('✅ Successfully connected to "gdgoctiu-bucket" bucket');
     } else {
       console.error(
-        '❌ Bucket "leaderboard-pfp" does not exist or you do not have access'
+        '❌ Bucket "gdgoctiu-bucket" does not exist or you do not have access'
       );
     }
   } catch (error) {

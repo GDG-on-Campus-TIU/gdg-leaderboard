@@ -20,7 +20,7 @@ if (process.env.CLOUD_RUN_ENV === "yes") {
   });
 }
 
-const bucket = storage.bucket("leaderboard-pfp");
+const bucket = storage.bucket(process.env.GCS_BUCKET_NAME || "gdgoctiu-bucket");
 
 paymentRouter.post("/upload", async (c: Context) => {
   const body = await c.req.parseBody();
@@ -59,10 +59,12 @@ paymentRouter.post("/upload", async (c: Context) => {
       let fileName = (ss as any).name || `uploaded-file-${Date.now()}`;
       const [_, ext] = fileName.split(".");
 
-      fileName = `${name
-        .toString()
-        .toLowerCase()
-        .replace(/\s+/g, "-")}_${requestId.toString()}_ss.${ext}`;
+      fileName = `${
+        name
+          .toString()
+          .toLowerCase()
+          .replace(/\s+/g, "-")
+      }_${requestId.toString()}_ss.${ext}`;
 
       const buffer = Buffer.from(await file.arrayBuffer());
 
@@ -81,7 +83,8 @@ paymentRouter.post("/upload", async (c: Context) => {
         return c.text("Upload failed", 500);
       });
 
-      const publicUrl = `https://storage.googleapis.com/${bucket.name}/payment_ss/${fileName}`;
+      const publicUrl =
+        `https://storage.googleapis.com/${bucket.name}/payment_ss/${fileName}`;
 
       blobStream.on("finish", async () => {
         return c.json({
@@ -140,7 +143,7 @@ paymentRouter.get("/find", async (c: Context) => {
   if (!orderId && !name && !email && !upiId && !phone) {
     return c.text(
       "At least one of orderId, name, email, upiId, or phone is required",
-      400
+      400,
     );
   }
 

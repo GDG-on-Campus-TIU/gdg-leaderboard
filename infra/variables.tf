@@ -18,5 +18,5 @@ variable "zone" {
 variable "bucket_name" {
   description = "The name of the storage bucket"
   type        = string
-  default     = "leaderboard-pfp"
+  default     = "gdgoctiu-bucket"
 }
