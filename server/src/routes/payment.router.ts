@@ -170,4 +170,27 @@ paymentRouter.get("/find", async (c: Context) => {
   });
 });
 
+paymentRouter.get("/all", async (c: Context) => {
+  const take = c.req.query("t");
+  const cursor = c.req.query("c");
+
+  const payments = await prisma.merchPayments.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+    take: take ? Number(take) : 10,
+    skip: cursor ? Number(cursor) : 0,
+  });
+
+  if (!payments || payments.length === 0) {
+    return c.text("No payments found", 404);
+  }
+
+  return c.json({
+    message: "Payments found",
+    status: 200,
+    data: payments,
+  });
+});
+
 export { paymentRouter };
