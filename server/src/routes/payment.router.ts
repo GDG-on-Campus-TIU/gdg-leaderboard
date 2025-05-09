@@ -112,7 +112,7 @@ paymentRouter.post("/upload", async (c: Context) => {
             upiId: upiId as string,
             confirmationSS: publicUrl,
             amount: Number(totalAmount),
-            specialName: specialName ? (specialName as string) : "NONE",
+            specialName: specialName as string,
             items,
             orderId: requestId,
             status: "CONFIRMED",

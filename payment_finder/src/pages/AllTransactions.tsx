@@ -86,7 +86,7 @@ function AllTransactions() {
         </div>
       )}
 
-      <div className="bg-white shadow-md rounded-lg w-full max-w-5xl overflow-hidden">
+      <div className="bg-white shadow-md rounded-lg w-full overflow-hidden">
         <Table>
           <TableCaption className="mb-4">All Transactions</TableCaption>
           <TableHeader>
@@ -96,6 +96,16 @@ function AllTransactions() {
               <TableHead>Email</TableHead>
               <TableHead>Phone</TableHead>
               <TableHead>Special Name</TableHead>
+              <TableHead>Items</TableHead>
+              <TableHead></TableHead>
+              <TableHead></TableHead>
+              <TableHead></TableHead>
+              <TableHead></TableHead>
+              <TableHead></TableHead>
+              <TableHead></TableHead>
+              <TableHead></TableHead>
+              <TableHead></TableHead>
+              <TableHead></TableHead>
               <TableHead>Status</TableHead>
               <TableHead className="text-center">Actions</TableHead>
               <TableHead className="text-right">Amount</TableHead>
@@ -109,6 +119,13 @@ function AllTransactions() {
                 <TableCell>{transaction.email}</TableCell>
                 <TableCell>{transaction.phone}</TableCell>
                 <TableCell>{transaction.specialName ?? "NA"}</TableCell>
+                <TableCell colSpan={10}>
+                  {transaction.items.map((item, index) => (
+                    <p>
+                    {`${item.split(":")[0]} (${item.split(":")[2]}pcs) - ${item.split(":")[1]}`}
+                    </p>
+                  ))}
+                </TableCell>
                 <TableCell>
                   <span
                     className={`px-2 py-1 rounded-full text-xs ${
@@ -138,8 +155,8 @@ function AllTransactions() {
             ))}
           </TableBody>
           <TableFooter>
-            <TableRow className="bg-background text-foreground">
-              <TableCell colSpan={7}>Total Amount</TableCell>
+            <TableRow>
+              <TableCell colSpan={17}>Total Amount</TableCell>
               <TableCell className="text-right">₹{totalAmount.toFixed(2)}</TableCell>
             </TableRow>
           </TableFooter>
