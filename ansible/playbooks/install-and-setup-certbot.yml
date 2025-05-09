@@ -1,11 +1,11 @@
 # @TODO install and setup certbot for SSL certificates and listed domains
-# - gdgtiu.org
-# - www.gdgtiu.org
-# - email.gdgtiu.org
-# - api.gdgtiu.org
-# - devx.gdgtiu.org
-# - leaderboard.gdgtiu.org
-# - metrics.gdgtiu.org
+# - gdgtiu.dev
+# - www.gdgtiu.dev
+# - email.gdgtiu.dev
+# - api.gdgtiu.dev
+# - devx.gdgtiu.dev
+# - leaderboard.gdgtiu.dev
+# - metrics.gdgtiu.dev
 
 ---
 - name: Install and setup certbot for nginx
@@ -27,13 +27,13 @@
     - name: Obtain SSL certificates
       command: >
         certbot --nginx
-        -d gdgtiu.org
-        -d www.gdgtiu.org
-        -d metrics.gdgtiu.org
-        -d api.gdgtiu.org
-        -d leaderboard.gdgtiu.org
-        -d email.gdgtiu.org
-        -d devx.gdgtiu.org
+        -d gdgtiu.dev
+        -d www.gdgtiu.dev
+        -d metrics.gdgtiu.dev
+        -d api.gdgtiu.dev
+        -d leaderboard.gdgtiu.dev
+        -d email.gdgtiu.dev
+        -d devx.gdgtiu.dev
       become: true
       register: certbot_output
       ignore_errors: yes

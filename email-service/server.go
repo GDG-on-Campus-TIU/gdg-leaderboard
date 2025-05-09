@@ -30,8 +30,8 @@ func StartServer() {
 			return
 		}
 
-		// Allow only gdgtiu.org and its subdomains + localhost
-		if origin == "http://localhost:3001" || origin == "http://localhost:5173" || strings.HasSuffix(origin, ".gdgtiu.org") || origin == "https://gdgtiu.org" {
+		// Allow only gdgtiu.dev and its subdomains + localhost
+		if origin == "http://localhost:3001" || origin == "http://localhost:5173" || strings.HasSuffix(origin, ".gdgtiu.dev") || origin == "https://gdgtiu.dev" {
 			c.Writer.Header().Set("Access-Control-Allow-Origin", origin)
 			c.Writer.Header().Set("Access-Control-Allow-Credentials", "true") // @NOTE only if the origin is trusted and not a wildcard
 		}

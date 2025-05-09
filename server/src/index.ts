@@ -31,7 +31,7 @@ app.use(prettyJSON());
 app.use(
   logger((msg, ...rest) => {
     log.http(msg, ...rest);
-  })
+  }),
 );
 app.use(
   cors({
@@ -42,11 +42,10 @@ app.use(
         "http://localhost:3001",
         "http://localhost:5173",
       ];
-      const allowedBaseDomain = "gdgtiu.org";
+      const allowedBaseDomain = "gdgtiu.dev";
 
       const isLocal = allowedLocalOrigins.includes(origin);
-      const isGdgtiuSubdomain =
-        origin.endsWith(`.${allowedBaseDomain}`) ||
+      const isGdgtiuSubdomain = origin.endsWith(`.${allowedBaseDomain}`) ||
         origin === `https://${allowedBaseDomain}`;
 
       if (isLocal || isGdgtiuSubdomain) {
@@ -57,7 +56,7 @@ app.use(
     },
     allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
-  })
+  }),
 );
 
 // ----------------------------------------------
@@ -75,7 +74,7 @@ app.notFound((c) => {
       error: "Not Found",
       message: "The requested resource was not found.",
     },
-    404
+    404,
   );
 });
 
@@ -89,7 +88,7 @@ app.onError((err, c) => {
       error: "Internal Server Error",
       message: err.message,
     },
-    500
+    500,
   );
 });
 
